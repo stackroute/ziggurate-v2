@@ -1,4 +1,5 @@
 import React from 'react';
+import Header from './AppBar'
 
 export default class ContextComponent extends React.Component {
   constructor() {
@@ -35,8 +36,11 @@ export default class ContextComponent extends React.Component {
   render() {
     return (
       <div>
-        <small>This is the Context Component</small>
-        { this.props.children }
+      <Header />
+        <div>
+          {/*<small>This is the Context Component</small>*/}
+          { this.props.children }
+         </div> 
       </div>
     );
   }

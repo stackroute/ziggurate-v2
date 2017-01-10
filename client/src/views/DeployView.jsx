@@ -2,6 +2,15 @@ import React from 'react';
 import RepositoryDetails from '../components/RepositoryDetails';
 import ServiceConfiguration from '../components/ServiceConfiguration';
 import DomainConfiguration from '../components/DomainConfiguration';
+import Paper from 'material-ui/Paper';
+
+const style = {
+  paper: {
+    padding: '50px',
+    margin: '10px',
+    width:800
+  }
+};
 
 export default class DeployView extends React.Component {
   constructor() {
@@ -27,17 +36,32 @@ export default class DeployView extends React.Component {
   render() {
     const components = [];
     components.unshift(<RepositoryDetails key="repositoryDetails" onSubmit={this.handleRepositorySelected} />);
-    if(this.state.serviceConfiguration) {
+    //if(this.state.serviceConfiguration) {
       components.unshift(<ServiceConfiguration key="serviceConfiguration" value={this.state.serviceConfiguration} onSubmit={this.handleServicesConfigured} />);
-    }
-    if(this.state.finalServiceConfiguration) {
+    //}
+    //if(this.state.finalServiceConfiguration) {
       components.unshift(<DomainConfiguration key="domainConfiguration" onSubmit={this.handleDomainConfigured} />);
-    }
+    //}
+
+    const items = components.map((item, index) => {
+  console.log("index:"+components.length);
+      return (
+        <Paper
+          key={components.length - index}
+          zDepth={2}
+          style={style.paper}
+           >
+          {item}
+        </Paper>
+        
+      );
+    });
 
     return (
-      <div>
-        <small>This is the deploy view.</small>
-        {components}
+      <div style={{marginLeft:280}}>
+
+       {items} 
+
       </div>
     );
   }
