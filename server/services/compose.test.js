@@ -1,6 +1,6 @@
 var dockerCompose=require('./compose');
 
-const directory = '/home/akanksha/Documents/reactProject/services';
+const directory = '/home/arzoogupta/Documents/projectZiggurate/ziggurate-v2/server/services';
 const repository = 'akanksha152/tasker';
 const repoName = repository.split('/')[1];
 var test=dockerCompose(directory.concat('/'+repoName), (err, dir) => {

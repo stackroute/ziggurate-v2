@@ -1,29 +1,29 @@
 var status;
-var gitRemove=function(repoPath,callback) {
+var makeDir=function(repoPath,callback) {
         const spawn=require('child_process').spawn;
         //ls -lh /usr
         //const repository = 'akanksha152/tasker';
         //const repoName = repository.split('/')[1];
-        const rmDir=spawn('mkdir', [ repoPath]);
+        const creDir=spawn('mkdir', [ repoPath]);
         console.log(repoPath);
-        rmDir.stderr.on('data', (data)=> {
+        creDir.stderr.on('data', (data)=> {
              status=`${data}`;
              console.log(status);
              
     
         });
 
-        rmDir.stdout.on('data', (data)=> {
+        creDir.stdout.on('data', (data)=> {
             status=`${data}`;
             console.log(status);
 
         
         });
         
-        rmDir.on('close', (code) => {
+        creDir.on('close', (code) => {
             console.log(`Status:${code}`);
-            if(code !== 0) { callback(new Error('Remove Directory exited with code', code)); return; }
+            if(code !== 0) { callback(new Error('Create Directory exited with code', code)); return; }
             callback(null);
         });            
 }
-module.exports = gitRemove;
+module.exports = makeDir;
