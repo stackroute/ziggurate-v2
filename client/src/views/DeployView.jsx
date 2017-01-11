@@ -3,6 +3,7 @@ import RepositoryDetails from '../components/RepositoryDetails';
 import ServiceConfiguration from '../components/ServiceConfiguration';
 import DomainConfiguration from '../components/DomainConfiguration';
 import Paper from 'material-ui/Paper';
+import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
 
 const style = {
   paper: {
@@ -36,23 +37,23 @@ export default class DeployView extends React.Component {
   render() {
     const components = [];
     components.unshift(<RepositoryDetails key="repositoryDetails" onSubmit={this.handleRepositorySelected} />);
-    //if(this.state.serviceConfiguration) {
+    if(this.state.serviceConfiguration) {
       components.unshift(<ServiceConfiguration key="serviceConfiguration" value={this.state.serviceConfiguration} onSubmit={this.handleServicesConfigured} />);
-    //}
-    //if(this.state.finalServiceConfiguration) {
+    }
+    if(this.state.finalServiceConfiguration) {
       components.unshift(<DomainConfiguration key="domainConfiguration" onSubmit={this.handleDomainConfigured} />);
-    //}
+    }
 
     const items = components.map((item, index) => {
   console.log("index:"+components.length);
       return (
-        <Paper
+        <Card
           key={components.length - index}
           zDepth={2}
           style={style.paper}
            >
           {item}
-        </Paper>
+        </Card>
         
       );
     });
@@ -70,8 +71,9 @@ export default class DeployView extends React.Component {
     console.log('Server assigned a deployment ID:',msg);
   }
 
-  handleRepositorySelected(selectedRepository) {
-    console.log('Selected Repository:', selectedRepository);
+  handleRepositorySelected = (selectedRepository,selectBranch) => {
+    console.log('Selected Repository:', selectedRepository," ",selectBranch);
+     this.context.socket.emit('clone',{repository:selectedRepository,branch:selectBranch});
   }
 
   handleServicesConfigured(serviceConfiguration) {

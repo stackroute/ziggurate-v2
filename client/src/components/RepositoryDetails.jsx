@@ -14,53 +14,82 @@ export default class RepositoryDetails extends React.Component {
       onSubmit: React.PropTypes.func.isRequired
     }
   }
+constructor() {
+  super();
+   this.state = {
+    repository:[],
+    branches:[]
 
-  state = {
-    value: 1,
   };
+  
+}
+componentDidMount() {
+  this.setState({repository:['akanksha152/tasker', 'ebin011/chatProject']}),
+  this.setState({branches:['docker-integration','dev']})
+}
+ 
 
-  handleChange = (event, index, value) => this.setState({value});
-
+  handleChangeRepo = (event, index, value) => this.setState({selectedRepository:value,selectedBranch:null});
+  handleChangeBranch=(event, index, value) => this.setState({selectedBranch:value})
+  
   render() {
-    
+      
+      const repoName=this.state.repository.map((repo) => {
+
+        return (
+          <MenuItem key={repo} value={repo} primaryText={repo}/>
+          );
+
+      });
+
+      const branchName=this.state.branches.map((branch) => {
+
+        return (
+          <MenuItem key={branch} value={branch} primaryText={branch}/>
+          );
+
+      });
 
     return (
       <div>
-      
+      <form onSubmit={ this.handleRepositorySelected.bind(this, this.state.selectedRepository,this.state.selectedBranch) }>
       <div style={{marginTop:20}}>
       <h2 style={{textAlign:"center"}}>Choose Repository and Branch</h2>
       <div style={{}}>
+      
        <SelectField
           floatingLabelText="Select Repositary"
-          value={this.state.value}
-           onChange={this.handleChange}
+          value={this.state.selectedRepository}
+           onChange={this.handleChangeRepo}
           >
-          <MenuItem value={1} primaryText="Repositary1" />
-          <MenuItem value={2} primaryText="Repositary2" />
-          <MenuItem value={3} primaryText="Repositary3" />
-          <MenuItem value={4} primaryText="Repositary4" />
-          <MenuItem value={5} primaryText="Repositary5" />
+        {repoName}
         </SelectField>
        <br/>
        <SelectField
           floatingLabelText="Select Branch"
-          value={this.state.value}
-           onChange={this.handleChange}
+          value={this.state.selectedBranch}
+          disabled={!this.state.selectedRepository}
+           onChange={this.handleChangeBranch}
             >
-         <MenuItem value={1} primaryText="Repositary1" />
-          <MenuItem value={2} primaryText="Repositary2" />
-          <MenuItem value={3} primaryText="Repositary3" />
-          <MenuItem value={4} primaryText="Repositary4" />
-          <MenuItem value={5} primaryText="Repositary5" />
+         {branchName}
+          
         </SelectField>
        <br/>
      </div>
        
        </div>
-        <RaisedButton label="Next" primary={true} 
-         />
-    
+        <RaisedButton label="Next" primary={true}
+        disabled={!this.state.selectedBranch} 
+        type= 'submit'
+                />
+       
+        
+    </form>
    </div> 
     );
+  }
+  handleRepositorySelected(repo,branch)
+  {
+    this.props.onSubmit(repo,branch);
   }
 }

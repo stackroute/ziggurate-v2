@@ -9,13 +9,13 @@ class App extends Component {
     return (
       <Router history={hashHistory}>
         {/* all components within app should load only when user has
-          * successfully logged in. */}
-        <Route path="/" component={ContextComponent}>
+        * successfully logged in. */}
+        <Route path="/app" component={ContextComponent}>
           <IndexRoute component={DashboardView} />
-          <Route path="/deploy" component={DeployView} />
+          <Route path="/app/deploy" component={DeployView} />
         </Route>
-      </Router>
-    );
+        </Router>
+        );
   }
 }
 

@@ -51,7 +51,7 @@ onLeftIconButtonTouchTap={() => { this.setState({open: true}); }}
   <h5>Git Profile Name</h5>
   </div>
   <Divider/>
-
+   
     <List >
      <ListItem primaryText="Dashboard" leftIcon={<DashboardIcon />} onTouchTap={this.handleClose}  />
      <ListItem primaryText="Server" leftIcon={<Server />} onTouchTap={this.handleClose} />
