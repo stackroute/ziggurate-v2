@@ -90,7 +90,7 @@ export default class ServiceConfiguration extends React.Component {
 
     return (
       <div>
-      
+      <form onSubmit={ this.handleServicesConfigured.bind(this) }>
       <div >
      
       <div style={{marginTop:0}}>
@@ -185,9 +185,10 @@ export default class ServiceConfiguration extends React.Component {
      </div>
        
        </div>
-     <RaisedButton label="Next" primary={true} style={{margin:12}} />
+     <RaisedButton label="Next" primary={true} style={{margin:12}} type= 'submit' />
         
       </div>
+      </form>
       </div>
     );
   }

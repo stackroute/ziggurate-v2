@@ -34,6 +34,13 @@ export default class DeployView extends React.Component {
     this.context.socket.emit('getDeploymentId', {accessToken: 'abc'});
   }
 
+  componentWillMount() {
+   this.context.socket.on('services', (services) => {
+     console.log('Received Services'+JSON.stringify(services)) ;
+     this.setState({serviceConfiguration: services});
+   });
+ }
+
   render() {
     const components = [];
     components.unshift(<RepositoryDetails key="repositoryDetails" onSubmit={this.handleRepositorySelected} />);
