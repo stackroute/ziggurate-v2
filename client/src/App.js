@@ -8,8 +8,7 @@ class App extends Component {
   render() {
     return (
       <Router history={hashHistory}>
-        {/* all components within app should load only when user has
-        * successfully logged in. */}
+       
         <Route path="/app" component={ContextComponent}>
           <IndexRoute component={DashboardView} />
           <Route path="/app/deploy" component={DeployView} />

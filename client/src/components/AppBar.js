@@ -13,62 +13,51 @@ import DeployIcon from 'material-ui/svg-icons/file/file-upload';
 import DeployedAppIcon from 'material-ui/svg-icons/action/view-module';
 import Divider from 'material-ui/Divider';
 
-const styles = {
-drawerAvatar: {
-
-},
-avatar: {
-
-}
-};
 
 class Header extends Component {
-constructor() {
-super();
-this.state = {
-open: false,
-};
-}
- handleToggle = () => this.setState({open: !this.state.open});
+  constructor() {
+    super();
+    this.state = {
+      open: false,
+    };
+  }
+  handleToggle = () => this.setState({open: !this.state.open});
   handleClose = () => this.setState({open: false});
 
   render() {
     return(
 
-<div>
- <AppBar
-title="Ziggurate"
-onLeftIconButtonTouchTap={() => { this.setState({open: true}); }}
-/>
-<Drawer open={this.state.drawerOpen}
-  docked={false}
-  style={styles.drawer}
-  open={this.state.open}
- onRequestChange={(open) => this.setState({open})} >
-  <div >
-  <div style={{marginTop:'50px',textAlign: 'center'}}>
-  <Avatar  size={150} style={styles.avatar}/>
-  <h5>Git Profile Name</h5>
-  </div>
-  <Divider/>
-   
-    <List >
-     <ListItem primaryText="Dashboard" leftIcon={<DashboardIcon />} onTouchTap={this.handleClose}  />
-     <ListItem primaryText="Server" leftIcon={<Server />} onTouchTap={this.handleClose} />
-      <IndexLink to="/app/deploy" activeClassName="active" style={{textDecoration:'none'}}> <ListItem primaryText="Deploy" leftIcon={<DeployIcon />} onTouchTap={this.handleClose} /></IndexLink>
-      <ListItem primaryText="Deployed App" leftIcon={<DeployedAppIcon />} onTouchTap={this.handleClose} />
-     <ListItem primaryText="Logout" leftIcon={<Logout />} onTouchTap={this.handleClose} />
-    </List>
 
-  
-  </div>
-</Drawer>
-</div>
+      <div>
+        <AppBar
+        title="Ziggurate"
+        onLeftIconButtonTouchTap={() => { this.setState({open: true}); }}/>
 
+        <Drawer open={this.state.drawerOpen}
+          docked={false}
+          open={this.state.open}
+          onRequestChange={(open) => this.setState({open})} >
+          <div >
+            <div style={{marginTop:'50px',textAlign: 'center'}}>
+              <Avatar  size={150} />
+              <h5>Git Profile Name</h5>
+            </div>
+            <Divider/>
+              <List >
+                <ListItem primaryText="Dashboard" leftIcon={<DashboardIcon />} onTouchTap={this.handleClose}  />
+                <ListItem primaryText="Server" leftIcon={<Server />} onTouchTap={this.handleClose} />
+                <IndexLink to="/deploy" activeClassName="active" style={{textDecoration:'none'}}> <ListItem primaryText="Deploy" leftIcon={<DeployIcon />} onTouchTap={this.handleClose} /></IndexLink>
+                <ListItem primaryText="Deployed App" leftIcon={<DeployedAppIcon />} onTouchTap={this.handleClose} />
+                <ListItem primaryText="Logout" leftIcon={<Logout />} onTouchTap={this.handleClose} />
+              </List>        
+          </div>
+        </Drawer>
+      </div>
 
-   );
+      );
 
-    }
+      }
+
 }
 
 export default Header;
