@@ -20,9 +20,9 @@ const style = {style1:{
 
 },
 style2:{
-position:"fixed",
-bottom:50,
-right:150,
+  position:"fixed",
+  bottom:50,
+  right:150,
 },
 style3:{
  marginLeft:20,
@@ -30,35 +30,35 @@ style3:{
 }, 
 domain: {
   fontWeight: 'bold',
-  }
+}
 };
 
 export default class ServiceConfiguration extends React.Component {
   static get propTypes() {
     return {
-      value: React.PropTypes.object.isRequired,
+      valueOfService: React.PropTypes.object.isRequired,
       onSubmit: React.PropTypes.func.isRequired
     }
   }
 
   state = {
-    
-     open: false,
-  };
-  handleNext = () => {
-    const {stepIndex} = this.state;
-    this.setState({
-      stepIndex: stepIndex + 1,
-      finished: stepIndex >= 2,
-    });
-  };
-  handlePrev = () => {
-    const {stepIndex} = this.state;
-    if (stepIndex > 0) {
-      this.setState({stepIndex: stepIndex - 1});
-    }
-  };
-  handleTouchTap = (event) => {
+
+   open: false,
+ };
+ handleNext = () => {
+  const {stepIndex} = this.state;
+  this.setState({
+    stepIndex: stepIndex + 1,
+    finished: stepIndex >= 2,
+  });
+};
+handlePrev = () => {
+  const {stepIndex} = this.state;
+  if (stepIndex > 0) {
+    this.setState({stepIndex: stepIndex - 1});
+  }
+};
+handleTouchTap = (event) => {
     // This prevents ghost click.
     event.preventDefault();
 
@@ -74,8 +74,8 @@ export default class ServiceConfiguration extends React.Component {
     });
   };
   
- 
- 
+
+
   constructor(props) {
     super(props);
     this.state = {value: 1};
@@ -83,6 +83,10 @@ export default class ServiceConfiguration extends React.Component {
 
   handleChange = (event, index, value) => this.setState({value});
 
+  componentDidMount() {
+    this.setState({valueService: this.props.valueOfService}),
+    console.log(this.state.valueService);
+  }
 
   render() {
     const {finished, stepIndex} = this.state;
@@ -90,106 +94,111 @@ export default class ServiceConfiguration extends React.Component {
 
     return (
       <div>
-      <form onSubmit={ this.handleServicesConfigured.bind(this) }>
+        <form  onSubmit={ this.handleServicesConfigured.bind(this,this.state.valueService)}>
       <div >
-     
+
       <div style={{marginTop:0}}>
       <h2 style={{textAlign:"center"}}>Configure Microservices</h2>
       <div style={{}}>
-        <GridList
+      <GridList
       cellHeight={62} 
-          >
+      >
       
-    
-        <GridTile style={{paddingTop:20}}>
 
-         
-    
-        <RaisedButton style={{width:300}}
-          onTouchTap={this.handleTouchTap}
-          label="App"
-        />
-        <Popover
-          open={this.state.open}
-          anchorEl={this.state.anchorEl}
-          anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
-          targetOrigin={{horizontal: 'left', vertical: 'top'}}
-          onRequestClose={this.handleRequestClose}
-          style={{marginTop:0,marginLeft:20, width:550}}
-        >
-         <form onSubmit={this.handleSubmit} >
-          <Menu >
-            <MenuItem>
-                  <RedisPart />
-            </MenuItem>
-            <MenuItem>
-                 <MongoPart />
-            </MenuItem>
-            <MenuItem>
-                 <Todo />
-            </MenuItem>
-            <MenuItem style={{fontWeight:'bold'}} primaryText="Queue-->" />
-            <MenuItem>
-          
-       
-             <RadioButtonGroup style={{marginLeft:5}}>
-                <RadioButton
-                  value="Worker Queue"
-                  label="Worker Queue"
-                />
-                <RadioButton
-                  value="Pub/sub"
-                  label="Pub/sub"
-                />
-             </RadioButtonGroup>
-         
-            </MenuItem>
-           <MenuItem>
-           <div style={{marginTop:15}}>
-              <Autoscaling />
-              </div>
-          </MenuItem>
-          </Menu>
+      <GridTile style={{paddingTop:20}}>
 
-         
-          <button style={{margin:12, marginLeft:200}}> config</button>
-          </form>
-        </Popover>
-        
-        
-        </GridTile>
-        <GridTile
-        
-          title="Mongo_db,Redis,GITHUB_CLIENT_ID......."
-          
-        >
-        </GridTile>
-         <GridTile style={{paddingTop:20}}>
-        <RaisedButton style={{marginTop:50}, {width:300}}
-          onTouchTap={this.handleTouchTap}
-          label="Chat"
-        />
-        </GridTile>
-        <GridTile
-          title="Mongo_db,Redis,GITHUB_CLIENT_ID......."
-          
-        >
-        </GridTile>
-          
-          
+
+
+      <RaisedButton style={{width:300}}
+      onTouchTap={this.handleTouchTap}
+      label="App"
+      />
+      <Popover
+      open={this.state.open}
+      anchorEl={this.state.anchorEl}
+      anchorOrigin={{horizontal: 'left', vertical: 'bottom'}}
+      targetOrigin={{horizontal: 'left', vertical: 'top'}}
+      onRequestClose={this.handleRequestClose}
+      style={{marginTop:0,marginLeft:20, width:550}}
+      >
+      <form onSubmit={this.handleSubmit} >
+      <Menu >
+      <MenuItem>
+      <RedisPart />
+      </MenuItem>
+      <MenuItem>
+      <MongoPart />
+      </MenuItem>
+      <MenuItem>
+      <Todo />
+      </MenuItem>
+      <MenuItem style={{fontWeight:'bold'}} primaryText="Queue-->" />
+      <MenuItem>
+
+
+      <RadioButtonGroup style={{marginLeft:5}}>
+      <RadioButton
+      value="Worker Queue"
+      label="Worker Queue"
+      />
+      <RadioButton
+      value="Pub/sub"
+      label="Pub/sub"
+      />
+      </RadioButtonGroup>
+
+      </MenuItem>
+      <MenuItem>
+      <div style={{marginTop:15}}>
+      <Autoscaling />
+      </div>
+      </MenuItem>
+      </Menu>
+
+
+      <button style={{margin:12, marginLeft:200}}> config</button>
+      </form>
+      </Popover>
+
+
+      </GridTile>
+      <GridTile
+
+      title="Mongo_db,Redis,GITHUB_CLIENT_ID......."
+
+      >
+      </GridTile>
+      <GridTile style={{paddingTop:20}}>
+      <RaisedButton style={{marginTop:50}, {width:300}}
+      onTouchTap={this.handleTouchTap}
+      label="Chat"
+      />
+      </GridTile>
+      <GridTile
+      title="Mongo_db,Redis,GITHUB_CLIENT_ID......."
+
+      >
+      </GridTile>
+
+
       
-    
-    </GridList>
-       
-       <br/>
-     </div>
-       
-       </div>
-     <RaisedButton label="Next" primary={true} style={{margin:12}} type= 'submit' />
-        
+
+      </GridList>
+
+      <br/>
+      </div>
+
+      </div>
+      <RaisedButton label="Next" primary={true} style={{margin:12}} type= 'submit' />
+
       </div>
       </form>
       </div>
-    );
+      );
   }
+  handleServicesConfigured(valueService)
+  {
+    console.log("service page"+valueService)
+    this.props.onSubmit(valueService);
   }
+}

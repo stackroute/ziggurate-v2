@@ -37,13 +37,34 @@ function cloneRepo(repoName,branch,socket,callback)
 
 }
 
+function configService(ServiceConfig,socket,callback)
+{
+	async.waterfall([
+	//Connvert JSON to YML
+    jsonToyml.bind(null,ServiceConfig)
+   // compose.bind(null,repoPath)
+    
+  
+  ], function(err, results) {
+    //if(err) { console.error('Deploy Failed with error', err); return; }
+    console.log(results);
+    socket.emit
+    ('appCreates',results);
+  });
+
+}
+
 
 module.exports = function(http) {
   const io = require('socket.io')(http);
   io.on('connection', (socket) => {
     console.log('A User connected');
     socket.on('clone',(data)=>{
-      cloneRepo(data.repository,data.branch,socket,(err,data)=>{console.log("Completed"+data.nativeObject)});
+      cloneRepo(data.repository,data.branch,socket,(err,data)=>{data});
+  	});
+  	socket.on('convert',(service)=>{
+      console.log("got the connection"+service.valueOfService)
+      configService(service.valueOfService,socket,(err,service)=>{service});
   	});
     socket.on('disconnect', () => {
       console.log('A User disconnected');

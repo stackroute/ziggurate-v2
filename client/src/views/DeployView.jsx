@@ -29,23 +29,30 @@ export default class DeployView extends React.Component {
   componentDidMount() {
     // TODO: All socket.on's should appear here.
     // Remember, not to write any functions here.
+    this.context.socket.on('services', (services) => {
+     console.log('Received Services'+JSON.stringify(services)) ;
+     this.setState({serviceConfiguration: services});
+   });
+
+   this.context.socket.on('appCreates', (domain) => {
+     console.log('App creation part'+domain);
+     this.setState({finalServiceConfiguration: domain});
+   });
+   
     this.context.socket.on('deploymentIdAssigned', this.deploymentIdAssigned);
 
     this.context.socket.emit('getDeploymentId', {accessToken: 'abc'});
   }
 
   componentWillMount() {
-   this.context.socket.on('services', (services) => {
-     console.log('Received Services'+JSON.stringify(services)) ;
-     this.setState({serviceConfiguration: services});
-   });
+   
  }
 
   render() {
     const components = [];
     components.unshift(<RepositoryDetails key="repositoryDetails" onSubmit={this.handleRepositorySelected} />);
     if(this.state.serviceConfiguration) {
-      components.unshift(<ServiceConfiguration key="serviceConfiguration" value={this.state.serviceConfiguration} onSubmit={this.handleServicesConfigured} />);
+      components.unshift(<ServiceConfiguration key="serviceConfiguration" valueOfService={this.state.serviceConfiguration} onSubmit={this.handleServicesConfigured} />);
     }
     if(this.state.finalServiceConfiguration) {
       components.unshift(<DomainConfiguration key="domainConfiguration" onSubmit={this.handleDomainConfigured} />);
@@ -83,9 +90,10 @@ export default class DeployView extends React.Component {
      this.context.socket.emit('clone',{repository:selectedRepository,branch:selectBranch});
   }
 
-  handleServicesConfigured(serviceConfiguration) {
-    console.log('Services Configured:', serviceConfiguration);
-    this.setState({finalServiceConfiguration: serviceConfiguration});
+  handleServicesConfigured = (value)=> {
+    console.log('Services Configured:', value);
+    //this.setState({finalServiceConfiguration: serviceConfiguration});
+    this.context.socket.emit('convert',{valueOfService: value});
   }
 
   handleDomainConfigured(domainConfiguration) {
