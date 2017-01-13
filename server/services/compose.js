@@ -1,10 +1,10 @@
 var status;
-var dockerCompose=function(folderPath, composePath, callback) {
+var dockerCompose=function(folderPath, callback) {
         const spawn=require('child_process').spawn;
         const path = require('path');
         //ls -lh /usr
 
-        const dockerCompose1=spawn('docker-compose', ['up', '-f', composePath, '-d'], {cwd:folderPath});
+        const dockerCompose1=spawn('docker-compose', ['up','-d'], {cwd:folderPath});
 
         dockerCompose1.stderr.on('data', (data)=> {
              status=`${data}`;
