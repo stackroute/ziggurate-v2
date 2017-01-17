@@ -18,19 +18,21 @@ constructor() {
   super();
    this.state = {
     repository:[],
-    branches:[]
+    branches:[],
+    isButtonDisabled: true
+    
 
   };
   
 }
 componentDidMount() {
-  this.setState({repository:['akanksha152/tasker', 'ebin011/chatProject']}),
-  this.setState({branches:['docker-integration','dev']})
+  this.setState({repository:['akanksha152/tasker', 'ebin011/chatProject','stackroute/quizztack']}),
+  this.setState({branches:['docker-integration','dev','dev-wave11']})
 }
  
 
   handleChangeRepo = (event, index, value) => this.setState({selectedRepository:value,selectedBranch:null});
-  handleChangeBranch=(event, index, value) => this.setState({selectedBranch:value})
+  handleChangeBranch=(event, index, value) => this.setState({selectedBranch:value,isButtonDisabled: false})
   
   render() {
       
@@ -52,7 +54,7 @@ componentDidMount() {
 
     return (
       <div>
-      <form onSubmit={ this.handleRepositorySelected.bind(this, this.state.selectedRepository,this.state.selectedBranch) }>
+      <form onSubmit={this.handleRepositorySelected.bind(this, this.state.selectedRepository,this.state.selectedBranch) }>
       <div style={{marginTop:20}}>
       <h2 style={{textAlign:"center"}}>Choose Repository and Branch</h2>
       <div style={{}}>
@@ -68,7 +70,7 @@ componentDidMount() {
        <SelectField
           floatingLabelText="Select Branch"
           value={this.state.selectedBranch}
-          disabled={!this.state.selectedRepository}
+          disabled={!this.state.selectedRepository }
            onChange={this.handleChangeBranch}
             >
          {branchName}
@@ -79,7 +81,7 @@ componentDidMount() {
        
        </div>
         <RaisedButton label="Next" primary={true}
-        disabled={!this.state.selectedBranch} 
+        disabled={ this.state.isButtonDisabled}
         type= 'submit'
                 />
        
@@ -90,6 +92,15 @@ componentDidMount() {
   }
   handleRepositorySelected(repo,branch)
   {
+    this.setState({
+      isButtonDisabled:true,
+      
+    });
+    
+    
     this.props.onSubmit(repo,branch);
+    console.log(this.state.isButtonDisabled);
+     
+    
   }
 }

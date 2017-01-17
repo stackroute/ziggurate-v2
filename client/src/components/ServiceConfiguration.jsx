@@ -42,9 +42,17 @@ export default class ServiceConfiguration extends React.Component {
       onSubmit: React.PropTypes.func.isRequired
     }
   }
-  state = {
-   open: false,
- };
+  constructor(props) {
+  super();
+   this.state = {
+    open: false,
+    isButtonDisabled: false,
+    value: 1
+  };
+}
+ //  state = {
+   
+ // };
  handleNext = () => {
   const {stepIndex} = this.state;
   this.setState({
@@ -78,10 +86,10 @@ handlePrev = () => {
     this.setState({open: false});
   };
  
-  constructor(props) {
-    super(props);
-    this.state = {value: 1};
-  }
+  // constructor(props) {
+  //   super(props);
+  //   this.state = {};
+  // }
   handleChange = (event, index, value) => this.setState({value});
   componentDidMount() {
     this.setState({valueService: this.props.valueOfService})
@@ -179,7 +187,7 @@ handlePrev = () => {
                 </GridList>    
               </div>
             </div>
-            <RaisedButton label="Next" primary={true} style={{margin:12}} type= 'submit' />
+            <RaisedButton label="Next" disabled={ this.state.isButtonDisabled} primary={true} style={{margin:12}} type= 'submit' />
           </div>
         </form>
       </div>
@@ -189,6 +197,10 @@ handlePrev = () => {
   
   handleServicesConfigured(valueService)
   { 
+    this.setState({
+      isButtonDisabled:true,
+      
+    });
     
     this.props.onSubmit(valueService);
   }

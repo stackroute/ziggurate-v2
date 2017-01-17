@@ -1,5 +1,6 @@
 const async = require('async');
 const path = require('path');
+
 const clone = require('./services/clone');
 const compose = require('./services/compose');
 const createDir = require('./services/createDir');
@@ -7,6 +8,14 @@ const checkOut = require('./services/checkOut');
 const findCompose = require('./services/findCompose');
 const ymlTojson =require('./services/ymlTojson');
 const jsonToyml =require('./services/jsonToyml');
+const gitModule=require('./services/gitModule');
+const gitInitilize=require('./services/gitInitilize');
+const gitUpdate=require('./services/gitUpdate');
+const dockerBuild=require('./services/dockerBuild');
+const dockerTag=require('./services/dockerTag');
+const dockerPush=require('./services/dockerPush');
+const dockerBundle=require('./services/dockerBundle');
+const dockerDeploy=require('./services/dockerDeploy');
 
 function cloneRepo(repoName,branch,socket,repoPath,callback)
 {
@@ -17,6 +26,8 @@ function cloneRepo(repoName,branch,socket,repoPath,callback)
     clone.bind(null, repoPath, repoName),
     //  Checkout required branch
     checkOut.bind(null,repoPath,branch),
+    //find gitmodule 
+    gitModule.bind(null,repoPath),
     //  find docker-compose.yml file with command "find . -name docker-compose.yml"
     findCompose.bind(null, repoPath),
     // Convert YML to JSON
@@ -35,11 +46,16 @@ function configService(ServiceConfig,socket,repoPath,callback)
 	async.waterfall([
 	//Connvert JSON to YML
     jsonToyml.bind(null,ServiceConfig,repoPath),
-    compose.bind(null,repoPath)
+    dockerBuild.bind(null,repoPath),
+    dockerTag.bind(null,repoPath),
+    dockerPush.bind(null),
+    dockerBundle.bind(null,repoPath),
+    dockerDeploy.bind(null,repoPath)
     
   
   ], function(err, results) {
     //if(err) { console.error('Deploy Failed with error', err); return; }
+    // process.on('message', function(data){console.log(data)});
     console.log(results);
     socket.emit
     ('appCreates',results);

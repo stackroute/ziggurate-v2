@@ -8,13 +8,16 @@ var dockerCompose=function(folderPath, callback) {
 
         dockerCompose1.stderr.on('data', (data)=> {
              status=`${data}`;
-            // console.log(`${data}`);
+            console.log(`${data}`);
+
+            // dockerCompose1.send({status});
 
         });
 
         dockerCompose1.stdout.on('data', (data)=> {
-            status="Sucess";
-           // console.log(`${data}`);
+            status=`${data}`;
+            
+           console.log(`${data}`);
         });
 
         dockerCompose1.on('close', (code) => {
