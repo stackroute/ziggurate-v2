@@ -4,7 +4,7 @@
   "description": "Ziggurate Dynamic Scaling",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js",
+    "start": "node bin/www",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -19,8 +19,17 @@
   "homepage": "https://github.com/stackroute/ziggurate-v2#readme",
   "dependencies": {
     "async": "^2.1.4",
+    "body-parser": "^1.16.0",
+    "cookie-parser": "^1.4.3",
     "express": "^4.14.0",
+    "jsonwebtoken": "^7.2.1",
+    "jwt-decode": "^2.1.0",
+    "lodash": "^4.17.4",
+    "react-router": "^3.0.1",
     "socket.io": "^1.7.2",
-    "yamljs": "^0.2.8"
+    "superagent": "^3.3.2",
+    "superagent-auth-bearer": "0.0.1",
+    "yamljs": "^0.2.8",
+    "yarn": "^0.19.1"
   }
 }
