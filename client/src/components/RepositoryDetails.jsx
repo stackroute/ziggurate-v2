@@ -29,6 +29,7 @@ constructor() {
   
 }
 componentDidMount() {
+/*<<<<<<< HEAD
 
   Request
        .get("https://api.github.com/users/ebin011/repos")
@@ -41,6 +42,10 @@ componentDidMount() {
     }
        
 
+=======*/
+  this.setState({repository:['sagarpatke/tasker','akanksha152/tasker', 'ebin011/chatProject','stackroute/quizztack']}),
+  this.setState({branches:['docker-integration','dev','dev-wave11']})
+}
  
 
   handleChangeRepo = (event, index, value) => {

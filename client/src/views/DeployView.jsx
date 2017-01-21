@@ -60,7 +60,7 @@ export default class DeployView extends React.Component {
       components.unshift(<ServiceConfiguration key="serviceConfiguration" valueOfService={this.state.serviceConfiguration} onSubmit={this.handleServicesConfigured} />);
     }
     if(this.state.finalServiceConfiguration) {
-      components.unshift(<DomainConfiguration key="domainConfiguration" onSubmit={this.handleDomainConfigured} />);
+      components.unshift(<DomainConfiguration key="domainConfiguration" dnsChanged={this.handleDnsChanged} />);
     }
 
     const items = components.map((item, index) => {
@@ -108,7 +108,12 @@ export default class DeployView extends React.Component {
     this.context.socket.emit('convert',{valueOfService: value});
   }
 
-  handleDomainConfigured(domainConfiguration) {
-    console.log('Domain Configured:', domainConfiguration);
+   handleDnsChanged = (newData) => {
+    console.log('DNS Changed');
+    let obj = {
+      appName: newData.appName,
+      domainName: newData.domainName
+    };
+    this.context.socket.emit('domainConfig', obj);
   }
 }

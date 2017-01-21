@@ -33,7 +33,7 @@ var dockerBuild=function(folderPath, callback) {
              //imageName=imageName.replace('\n','');
              //console.log(imageID);
              //console.log(imageName);
-            callback(null,imageID);
+            callback(null);
         });
 }
 module.exports = dockerBuild;
