@@ -86,7 +86,7 @@ export default class DeployView extends React.Component {
       components.unshift(<ErrorDisply valueOfResult={this.state.result[0].result} valueOfDepId={this.state.result[0].deployementId}/>)
     }
     if(this.state.finalServiceConfiguration) {
-      components.unshift(<DomainConfiguration key="domainConfiguration" onSubmit={this.handleDomainConfigured} />);
+      components.unshift(<DomainConfiguration key="domainConfiguration" dnsChanged={this.handleDnsChanged} />);
     }
     
 
@@ -135,7 +135,12 @@ export default class DeployView extends React.Component {
     this.context.socket.emit('convert',{valueOfService: value});
   }
 
-  handleDomainConfigured(domainConfiguration) {
-    console.log('Domain Configured:', domainConfiguration);
+   handleDnsChanged = (newData) => {
+    console.log('DNS Changed');
+    let obj = {
+      appName: newData.appName,
+      domainName: newData.domainName
+    };
+    this.context.socket.emit('domainConfig', obj);
   }
 }

@@ -1,7 +1,7 @@
 module.exports = {
   port: process.env.PORT || 9080,
-  GITHUB_CLIENT_ID:'ee052bcbb3a5ad8e880f',
-  GITHUB_CLIENT_SECRET:'06b34a731ddf7efbdd84ba971afc69c73f60f525',
+  GITHUB_CLIENT_ID:'2eb28056e37758b0ba34',
+  GITHUB_CLIENT_SECRET:'ce0031a2155373dd4f9db9366812ab8d019bfced',
   GITHUB_ORGANISATION:'ziggurate-v2',
   MONGO_URL:'mongodb://localhost/ziggurate',
   JWT_SECRET: process.env.JWT_SECRET || 'clintjose08',

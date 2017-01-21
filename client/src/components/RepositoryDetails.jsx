@@ -5,6 +5,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import CircularProgressbar from 'react-circular-progressbar';
+import Request from 'superagent'
 
 
 
@@ -16,30 +17,72 @@ export default class RepositoryDetails extends React.Component {
   }
 constructor() {
   super();
+  this.selectBranch=this.selectBranch.bind(this);
    this.state = {
-    repository:[],
+    repository:[{}],
     branches:[],
-    isButtonDisabled: true
+    isButtonDisabled: true,
+    selectedRepository:''
     
 
   };
   
 }
 componentDidMount() {
-  this.setState({repository:['akanksha152/tasker', 'ebin011/chatProject','stackroute/quizztack']}),
+/*<<<<<<< HEAD
+
+  Request
+       .get("https://api.github.com/users/ebin011/repos")
+       .then((res) => {
+        this.setState({
+           repository: res.body,
+           
+         });
+       });
+    }
+       
+
+=======*/
+  this.setState({repository:['sagarpatke/tasker','akanksha152/tasker', 'ebin011/chatProject','stackroute/quizztack']}),
   this.setState({branches:['docker-integration','dev','dev-wave11']})
 }
  
 
-  handleChangeRepo = (event, index, value) => this.setState({selectedRepository:value,selectedBranch:null});
-  handleChangeBranch=(event, index, value) => this.setState({selectedBranch:value,isButtonDisabled: false})
+  handleChangeRepo = (event, index, value) => {
+      
+  this.setState({selectedRepository:value,selectedBranch:null});
+          {this.selectBranch()} 
+       };
+
+
+     selectBranch=()=>{
+        var reponame=this.state.selectedRepository;
+        console.log("dufudf");
+        console.log({reponame});
+        Request
+       .get("https://api.github.com/repos/ebin011/"+{reponame}+"/branches")
+       .then((res) => {
+        this.setState({
+          branches: res.body,
+          
+         });
+      });
+       }
+  
+  handleChangeBranch=(event, index, value) => {
+ 
+    
+    this.setState({selectedBranch:value,isButtonDisabled: false});
+
+}
+    
   
   render() {
-      
+    console.log(this.state.selectedRepository);
       const repoName=this.state.repository.map((repo) => {
 
         return (
-          <MenuItem key={repo} value={repo} primaryText={repo}/>
+          <MenuItem key={repo.name} value={repo.name} primaryText={repo.name}/>
           );
 
       });
@@ -47,7 +90,7 @@ componentDidMount() {
       const branchName=this.state.branches.map((branch) => {
 
         return (
-          <MenuItem key={branch} value={branch} primaryText={branch}/>
+          <MenuItem key={branch.name} value={branch.name} primaryText={branch.name}/>
           );
 
       });

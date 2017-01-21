@@ -50,9 +50,6 @@ module.exports = function(inputApp, inputOptions) {
 
   return app;
 };
-
-
-
 http.listen(config.port, () => {
   console.log('ExpressJS listening on port:', config.port);
 });

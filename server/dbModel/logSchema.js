@@ -1,5 +1,3 @@
-
-
 const mongoose=require('mongoose');
 const schema=mongoose.Schema;
 
@@ -10,6 +8,4 @@ status:{type:String},
 code:{type:String}
 
 })
-
-
 module.exports=mongoose.model('logs',logSchema);

@@ -4,7 +4,7 @@ import Drawer from 'material-ui/Drawer';
 import MenuItem from 'material-ui/MenuItem';
 import Avatar from 'material-ui/Avatar';
 import FlatButton from 'material-ui/FlatButton';
-import {IndexLink} from 'react-router';
+import {IndexLink,Link} from 'react-router';
 import {List, ListItem} from 'material-ui/List';
 import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
 import Logout from 'material-ui/svg-icons/action/highlight-off';
@@ -12,6 +12,16 @@ import Server from 'material-ui/svg-icons/device/storage';
 import DeployIcon from 'material-ui/svg-icons/file/file-upload';
 import DeployedAppIcon from 'material-ui/svg-icons/action/view-module';
 import Divider from 'material-ui/Divider';
+import cookie from 'react-cookie';
+import request from 'superagent';
+import jwt from 'jwt-decode';
+
+
+function decodeToken(token) {
+  let decoded = jwt(token);
+  return(
+    decoded.roles[0]);
+}
 
 
 class Header extends Component {
@@ -21,6 +31,45 @@ class Header extends Component {
       open: false,
     };
   }
+
+static get contextTypes() {
+    return {
+      router: React.PropTypes.object.isRequired
+    };
+  }
+
+
+   componentDidMount() {
+    const setUserInState = () => {
+      this.setState({
+        user: JSON.parse(localStorage.user)
+      });
+    };
+    const viewType = () => {
+      const token = cookie.load('token');
+    };
+
+
+  
+      
+    if(!localStorage.user) {
+      request
+      .get('http://localhost:9080/api/v1/auth/github/me')
+      .end(function(err, response) {
+        if(err) { throw err; }
+        localStorage.user = JSON.stringify(response.body);
+        
+      });
+    } 
+  }
+
+  handleLogout() {
+    delete localStorage.user;
+
+    cookie.remove('token');
+
+     }
+
   handleToggle = () => this.setState({open: !this.state.open});
   handleClose = () => this.setState({open: false});
 
@@ -47,7 +96,7 @@ class Header extends Component {
                 <ListItem primaryText="Server" leftIcon={<Server />} onTouchTap={this.handleClose} />
                 <IndexLink to="/app/deploy" activeClassName="active" style={{textDecoration:'none'}}> <ListItem primaryText="Deploy" leftIcon={<DeployIcon />} onTouchTap={this.handleClose} /></IndexLink>
                 <ListItem primaryText="Deployed App" leftIcon={<DeployedAppIcon />} onTouchTap={this.handleClose} />
-                <ListItem primaryText="Logout" leftIcon={<Logout />} onTouchTap={this.handleClose} />
+                <Link to="/"><MenuItem primaryText="Logout" leftIcon={<Logout />} onClick={this.handleLogout.bind(this)} /></Link>
               </List>        
           </div>
         </Drawer>
