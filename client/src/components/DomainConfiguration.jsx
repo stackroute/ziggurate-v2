@@ -16,27 +16,23 @@ export default class DomainConfiguration extends React.Component {
   render() {
     return (
       <div >
-     
+      <form>
       <div style={{marginTop:20}}>
       <h2 style={{textAlign:"center"}}>Configure Application</h2>
-      <div style={{}}>
        <TextField
       hintText="App Name"
       floatingLabelText="App Name"
       type="text"
-    /><br />
+      /><br />
        <TextField
       hintText="Domain Name"
       floatingLabelText="Domain Name"
       type="text"
     /> <span>.ziggurate.blr.stackroute.in</span>
     <br />
-     </div>
-       
        </div>
         <RaisedButton label="Finish" primary={true}  />
-  
-
+        </form>
     </div>
     );
   }

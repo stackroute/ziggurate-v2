@@ -70,6 +70,8 @@ function configService(ServiceConfig, socket, repoPath, callback)
 
 function domainConfig(sName, dName)
 {
+  console.log(sName);
+  console.log(dName);
   writeNameId.bind(sName, dName)
 }
 
