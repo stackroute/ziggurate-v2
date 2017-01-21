@@ -4,6 +4,7 @@ import Popover from 'material-ui/Popover';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import MenuItem from 'material-ui/MenuItem';
+import SelectField from 'material-ui/SelectField';
 import Menu from 'material-ui/Menu';
 import RedisPart from './RedisPart';
 import MongoPart from './MongoPart';
@@ -13,6 +14,7 @@ import Autoscaling from './AutoScaling';
 import Dialog from 'material-ui/Dialog';
 import CustomGrid from './CustomGrid';
 import ConfigureService from './CustomGrid'
+
 
 const style = {style1:{
  height: 350,
@@ -129,8 +131,10 @@ onChange1(index, newService) {
   this.setState({services: services, dialogOpen: dialogOpen});
 }
 
+  handleChangePorts= (event, index, value) => this.setState({selectedService: value});  
 
   render() {
+   
     const actions = [
       <FlatButton
         label="Cancel"
@@ -151,8 +155,15 @@ onChange1(index, newService) {
     const {finished, stepIndex} = this.state;
     const contentStyle = {margin: '0 16px'};
     console.log('serviceNames:', this.state.serviceNames);
+    const img=this.state.serviceNames.map((serName)=>{
+     return(
+     <MenuItem key={serName} value={serName} primaryText={serName} />
+     );
+   });
+
   let services1= this.state.serviceNames.map((serviceName, i)=> {
      return(
+      <div>
          <GridList
       cellHeight={62} 
       >
@@ -180,7 +191,7 @@ onChange1(index, newService) {
         </Dialog>
       </GridTile>
       </GridList>
-     
+     </div>
       )
    }
    );
@@ -194,7 +205,17 @@ onChange1(index, newService) {
       <div style={{}}>
       {services1}
       </div>
-
+      <div>
+       <SelectField
+         floatingLabelText="Select service contain port"
+         value={this.state.selectedService}
+         onChange={this.handleChangePorts}
+       
+         >
+       {img}
+       </SelectField>
+      </div>
+      
       </div>
       <RaisedButton label="Next" primary={true} style={{margin:12}} type= 'submit' />
 

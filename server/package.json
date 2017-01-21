@@ -26,6 +26,7 @@
     "jwt-decode": "^2.1.0",
     "lodash": "^4.17.4",
     "react-router": "^3.0.1",
+    "redbird": "^0.6.15",
     "socket.io": "^1.7.2",
     "superagent": "^3.3.2",
     "superagent-auth-bearer": "0.0.1",

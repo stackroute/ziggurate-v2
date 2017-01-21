@@ -26,7 +26,7 @@ constructor() {
   
 }
 componentDidMount() {
-  this.setState({repository:['akanksha152/tasker', 'ebin011/chatProject','stackroute/quizztack']}),
+  this.setState({repository:['sagarpatke/tasker','akanksha152/tasker', 'ebin011/chatProject','stackroute/quizztack']}),
   this.setState({branches:['docker-integration','dev','dev-wave11']})
 }
  

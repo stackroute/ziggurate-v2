@@ -110,5 +110,6 @@ export default class DeployView extends React.Component {
 
   handleDomainConfigured(domainConfiguration) {
     console.log('Domain Configured:', domainConfiguration);
+    this.context.socket.emit('domainConfig',{sName: 'service',dName: 'domain'});
   }
 }

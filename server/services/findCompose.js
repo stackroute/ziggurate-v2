@@ -20,8 +20,9 @@ var findCompose=function(repoPath, callback) {
        compose1.on('close', (code) => {
            // console.log(`Status:${code}`);
             if(code !== 0) { callback(new Error('git clone exited with code', code)); return; }
+            console.log(path);
           //  console.log(path);
-            callback(null,path);
+            callback(null, path);
         });
 }
 module.exports = findCompose;
