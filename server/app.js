@@ -4,11 +4,14 @@ const config = require('./config');
 require('./io')(http);
 const path = require('path');
 const _ = require('lodash');
+const getRouter=require('./route/logDataRoute');
 
 
 app.get('/',(req, res) => {
   res.send('Hello, World!');
 });
+
+app.use('/',getRouter);
 
 function createApp() {
   const app = express();
@@ -47,6 +50,9 @@ module.exports = function(inputApp, inputOptions) {
 
   return app;
 };
+
+
+
 http.listen(config.port, () => {
   console.log('ExpressJS listening on port:', config.port);
 });

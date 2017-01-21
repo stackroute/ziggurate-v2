@@ -3,6 +3,9 @@ const app = express();
 const path = require('path');
 const io = require('../io.js');
 const http = require('http');
+const getRouter=require('../route/logDataRoute');
+const mongoose=require('mongoose');
+const dbConnection=mongoose.connect('mongodb://localhost:27017/ziggurateTemp');
 
 app.use(function(req, res, next) {
 	console.log('hi');
@@ -11,11 +14,15 @@ res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, content-yy
 next();
 });
 
+
+
+
 app.use(require('cookie-parser')());
 app.use('/api/v1', require(path.join(__dirname, '..', 'api')));
-
+app.use('/api/v1',getRouter);
 const server = http.createServer(app);
 io(server);
+
 server.listen(9080, () => {
 	console.log('Express server started');
 });

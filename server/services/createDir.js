@@ -1,4 +1,6 @@
 var status;
+var redisStore =require('./redisFunctions');
+var redisCompleteStore=require('./redisUserFunctions');
 var makeDir=function(repoPath,callback) {
         const spawn=require('child_process').spawn;
         //ls -lh /usr
@@ -9,20 +11,19 @@ var makeDir=function(repoPath,callback) {
         creDir.stderr.on('data', (data)=> {
              status=`${data}`;
              console.log(status);
-             
-    
+            
         });
 
         creDir.stdout.on('data', (data)=> {
             status=`${data}`;
-            console.log(status);
-
-        
+            console.log(status);      
         });
         
         creDir.on('close', (code) => {
             console.log(`Status:${code}`);
             if(code !== 0) { callback(new Error('Create Directory exited with code', code)); return; }
+            redisCompleteStore('New Directory Created');
+            redisStore('New Directory Created'); 
             callback(null);
         });            
 }

@@ -23,7 +23,7 @@ var dockerDeploy=function(folderPath,dabFile, callback) {
             console.log(`Status:${code}`);
             if(code !== 0) { callback(new Error('"docker bundle" exited with code', code)); return; }
              
-            callback(null,"Completed");
+            callback(null,code,status,'completed');
         });
 }
 module.exports = dockerDeploy;

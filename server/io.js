@@ -16,9 +16,18 @@ const dockerTag=require('./services/dockerTag');
 const dockerPush=require('./services/dockerPush');
 const dockerBundle=require('./services/dockerBundle');
 const dockerDeploy=require('./services/dockerDeploy');
+const deployResults=require('./controller/writeLogDatas');
 
-function cloneRepo(repoName,branch,socket,repoPath,callback)
+var deploymentId;
+
+//const mongoModel=require('./dbModel/logSchema');
+// const mongoose=require('mongoose');
+// const dbConnection=mongoose.connect('mongodb://localhost:27017/ziggurateTemp');
+
+
+function cloneRepo(repoName,branch,DeploymentId,socket,repoPath,callback)
 {
+  
 	async.waterfall([
     //   to MKDIR
     createDir.bind(null,repoPath),
@@ -34,7 +43,9 @@ function cloneRepo(repoName,branch,socket,repoPath,callback)
     ymlTojson.bind(null)  
   
   ], function(err, results) {
+    if(err) { console.error('Cloning Failed with error', err);deployResults(deploymentId,code,err,results); return; }
     console.log(JSON.stringify(results));
+
     socket.emit
     ('services',results);
   });
@@ -43,20 +54,24 @@ function cloneRepo(repoName,branch,socket,repoPath,callback)
 
 function configService(ServiceConfig,socket,repoPath,callback)
 {
+  console.log("idddddddddddd"+deploymentId);
 	async.waterfall([
 	//Connvert JSON to YML
     jsonToyml.bind(null,ServiceConfig,repoPath),
-    dockerBuild.bind(null,repoPath),
-    dockerTag.bind(null,repoPath),
-    dockerPush.bind(null),
-    dockerBundle.bind(null,repoPath),
-    dockerDeploy.bind(null,repoPath)
+    compose.bind(null,repoPath)
+    // dockerBuild.bind(null,repoPath),
+    // dockerTag.bind(null,repoPath),
+    // dockerPush.bind(null),
+    // dockerBundle.bind(null,repoPath),
+    // dockerDeploy.bind(null,repoPath)
     
   
-  ], function(err, results) {
-    //if(err) { console.error('Deploy Failed with error', err); return; }
-    // process.on('message', function(data){console.log(data)});
+  ], function(err,code,status, results) {
+    if(err) { console.error('Deploy Failed with error', err);deployResults(deploymentId,code,err,results); }
+     process.on('message', function(data){console.log(data)});
+    deployResults(deploymentId,code,status,results);
     console.log(results);
+    
     socket.emit
     ('appCreates',results);
   });
@@ -66,11 +81,15 @@ function configService(ServiceConfig,socket,repoPath,callback)
 
 module.exports = function(http) {
   const io = require('socket.io')(http);
+  
   io.on('connection', (socket) => {
     const repoPath=path.join('tmp/repositories').concat('/'+Math.floor(Math.random()*18371));
     console.log('A User connected');
     socket.on('clone',(data)=>{
-      cloneRepo(data.repository,data.branch,socket,repoPath,(err,data)=>{data});
+
+      deploymentId=data.DeploymentId;
+     
+      cloneRepo(data.repository,data.branch,data.DeploymentId,socket,repoPath,(err,data)=>{data});
   	});
   	socket.on('convert',(service)=>{
       console.log("got the connection"+service.valueOfService)
@@ -79,6 +98,7 @@ module.exports = function(http) {
     socket.on('disconnect', () => {
       console.log('A User disconnected');
     });
+    
 
     require('./io/deploy')(socket);
 

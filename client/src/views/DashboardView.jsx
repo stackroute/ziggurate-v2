@@ -1,9 +1,14 @@
 import React from 'react';
+import Home from '../components/Home';
 
 export default class DashboardView extends React.Component {
   render() {
     return (
-      <small>This is the Dashboard Component.</small>
+      <div>
+        <div className='container-fluid'>
+        <Home />
+        </div>
+        </div>
     );
   }
 }

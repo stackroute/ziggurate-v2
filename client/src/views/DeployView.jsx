@@ -3,9 +3,11 @@ import CircularProgressbar from 'react-circular-progressbar'
 import RepositoryDetails from '../components/RepositoryDetails';
 import ServiceConfiguration from '../components/ServiceConfiguration';
 import DomainConfiguration from '../components/DomainConfiguration';
+import ErrorDisply from '../components/ErrorDisply';
 import Paper from 'material-ui/Paper';
 import './style.css'
 import {Card, CardActions, CardHeader, CardMedia, CardTitle, CardText} from 'material-ui/Card';
+import Request from 'superagent';
 
 const style = {
   paper: {
@@ -22,6 +24,8 @@ export default class DeployView extends React.Component {
     this.state={
       progress: null,
       inc: 0,
+      
+      
     };
   }
 
@@ -46,22 +50,45 @@ export default class DeployView extends React.Component {
      this.setState({inc: this.state.inc+20});
      this.setState({progress: "Configured successfully"});
      this.setState({finalServiceConfiguration: domain});
+
+     Request
+          .get('http://localhost:9080/api/v1/api/'+this.state.deploymentId+'/result')
+          .then((res)=>{
+            console.log("Getting Value"+res);
+            this.setState({
+              result:res.body
+
+            });
+
+          });
    });
    
-    this.context.socket.on('deploymentIdAssigned', this.deploymentIdAssigned);
+    this.context.socket.on('deploymentIdAssigned', (deploymentIdAssigned)=>{
+      console.log("DeploymentId"+deploymentIdAssigned);
+      this.setState({deploymentId:deploymentIdAssigned});
+      console.log("LastCheck"+this.state.deploymentId);
+    });
 
     this.context.socket.emit('getDeploymentId', {accessToken: 'abc'});
+      console.log(this.state.result);
+     
   }
 
   render() {
+   
     const components = [];
     components.unshift(<RepositoryDetails key="repositoryDetails" onSubmit={this.handleRepositorySelected} />);
     if(this.state.serviceConfiguration) {
       components.unshift(<ServiceConfiguration key="serviceConfiguration" valueOfService={this.state.serviceConfiguration} onSubmit={this.handleServicesConfigured} />);
     }
+    if(this.state.result){
+      // console.log("GetData",this.state.result[0].result);
+      components.unshift(<ErrorDisply valueOfResult={this.state.result[0].result} valueOfDepId={this.state.result[0].deployementId}/>)
+    }
     if(this.state.finalServiceConfiguration) {
       components.unshift(<DomainConfiguration key="domainConfiguration" onSubmit={this.handleDomainConfigured} />);
     }
+    
 
     const items = components.map((item, index) => {
     console.log("index:"+components.length);
@@ -97,7 +124,7 @@ export default class DeployView extends React.Component {
     console.log('Selected Repository:', selectedRepository," ",selectBranch);
     this.setState({progress: "Cloning..."});
     console.log(this.state.progress);
-     this.context.socket.emit('clone',{repository:selectedRepository,branch:selectBranch});
+     this.context.socket.emit('clone',{repository:selectedRepository,branch:selectBranch,DeploymentId:this.state.deploymentId});
   }
 
   handleServicesConfigured = (value)=> {

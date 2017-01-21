@@ -1,6 +1,11 @@
 var status;
+var redisStore =require('./redisFunctions');
+var redisCompleteStore=require('./redisUserFunctions');
+
 var gitclone=function(repoPath, repoName, callback) {
         const spawn=require('child_process').spawn;
+       
+
         //ls -lh /usr
         var res = repoName.split("/");
         res=res[res.length-1];
@@ -13,8 +18,9 @@ var gitclone=function(repoPath, repoName, callback) {
          const gitclone1=spawn('git', ['clone', 'https://github.com/'+repoName, '.'],{cwd:path});
         gitclone1.stderr.on('data', (data)=> {
              status=`${data}`;
-             console.log(status);
-    
+             redisCompleteStore(status);
+             // console.log(status);
+
         });
 
         gitclone1.stdout.on('data', (data)=> {
@@ -24,8 +30,13 @@ var gitclone=function(repoPath, repoName, callback) {
         
         gitclone1.on('close', (code) => {
             console.log(`Status:${code}`);
-            if(code !== 0) { callback(new Error('git clone exited with code', code)); return; }
+            if(code !== 0) { 
+                redisCompleteStore('Cloning exited with code '+code);
+                callback(new Error('git clone exited with code', code)); return; 
+            }
+            redisStore('Cloning Part Done..');
             callback(null);
+            
         });            
 }
 module.exports = gitclone;
