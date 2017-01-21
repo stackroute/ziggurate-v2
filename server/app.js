@@ -47,6 +47,7 @@ module.exports = function(inputApp, inputOptions) {
 
   return app;
 };
+const connection=mongoose.connect('mongodb://localhost:27017/ziggurateTemp');
 http.listen(config.port, () => {
   console.log('ExpressJS listening on port:', config.port);
 });

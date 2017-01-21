@@ -12,6 +12,7 @@ next();
 });
 
 app.use(require('cookie-parser')());
+app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));
 app.use('/api/v1', require(path.join(__dirname, '..', 'api')));
 
 const server = http.createServer(app);

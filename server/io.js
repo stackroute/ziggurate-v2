@@ -16,6 +16,7 @@ const dockerTag=require('./services/dockerTag');
 const dockerPush=require('./services/dockerPush');
 const dockerBundle=require('./services/dockerBundle');
 const dockerDeploy=require('./services/dockerDeploy');
+const logSchema=require('./dbModel/logSchema');
 
 function cloneRepo(repoName,branch,socket,repoPath,callback)
 {

@@ -78,7 +78,7 @@ module.exports = {
             if(err3) { res.status(500).json(err3); return; }
               res
               .cookie('token', jwt)
-              .redirect('http://localhost:3000/#/app');
+              .redirect('http://localhost:9080/#/app');
             return;
           });
         });
