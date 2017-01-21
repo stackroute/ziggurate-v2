@@ -8,16 +8,18 @@ const checkOut = require('./services/checkOut');
 const findCompose = require('./services/findCompose');
 const ymlTojson =require('./services/ymlTojson');
 const jsonToyml =require('./services/jsonToyml');
-const gitModule=require('./services/gitModule');
-const gitInitilize=require('./services/gitInitilize');
-const gitUpdate=require('./services/gitUpdate');
-const dockerBuild=require('./services/dockerBuild');
-const dockerTag=require('./services/dockerTag');
-const dockerPush=require('./services/dockerPush');
-const dockerBundle=require('./services/dockerBundle');
-const dockerDeploy=require('./services/dockerDeploy');
-const writeNameId=require('./services/writeNameId');
+const gitModule = require('./services/gitModule');
+const gitInitilize = require('./services/gitInitilize');
+const gitUpdate = require('./services/gitUpdate');
+const dockerBuild = require('./services/dockerBuild');
+const dockerTag = require('./services/dockerTag');
+const dockerPush = require('./services/dockerPush');
+const dockerBundle = require('./services/dockerBundle');
+const dockerDeploy = require('./services/dockerDeploy');
 const replaceVersion = require('./services/replaceVersion');
+const inspectService = require('./services/inspectService');
+const publishIPToRedis = require('./services/publishIPToRedis');
+const registerReverseProxy = require('./services/registerReverseProxy')();
 
 function cloneRepo(repoName, branch, socket, repoPath, callback)
 {
@@ -68,11 +70,17 @@ function configService(ServiceConfig, socket, repoPath, callback)
 
 }
 
-function domainConfig(sName, dName)
+function domainConfig(domainName, repoPath, serviceNameToExpose)
 {
-  console.log(sName);
-  console.log(dName);
-  writeNameId.bind(sName, dName)
+  let stackName = repoPath.split('/')
+  stackName=stackName[stackName.length - 1];
+  async.waterfall([
+    inspectService.bind(null, stackName, serviceNameToExpose),
+    publishIPToRedis.bind(null, domainName)
+    ], (err, results) => {
+        console.log('Reverse Proxy Done');
+    });
+
 }
 
 module.exports = function(http) {
@@ -92,7 +100,8 @@ module.exports = function(http) {
       console.log('A User disconnected');
     });
     socket.on('domainConfig',(dconf) => {
-      domainConfig(dconf.sName, dconf.dName);
+      //TODO: GET THE EXPOSED SERVICE NAME FROM THE CLIENT
+      domainConfig(dconf.domainName, repoPath, 'tasker');
       console.log('configing domain');
     });
 

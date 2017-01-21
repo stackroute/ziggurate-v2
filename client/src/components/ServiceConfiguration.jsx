@@ -155,7 +155,7 @@ onChange1(index, newService) {
     const {finished, stepIndex} = this.state;
     const contentStyle = {margin: '0 16px'};
     console.log('serviceNames:', this.state.serviceNames);
-    const img=this.state.serviceNames.map((serName)=>{
+    const img=this.state.serviceNames.map((serName) => {
      return(
      <MenuItem key={serName} value={serName} primaryText={serName} />
      );
@@ -210,15 +210,12 @@ onChange1(index, newService) {
          floatingLabelText="Select service contain port"
          value={this.state.selectedService}
          onChange={this.handleChangePorts}
-       
          >
        {img}
        </SelectField>
-      </div>
-      
+      </div>      
       </div>
       <RaisedButton label="Next" primary={true} style={{margin:12}} type= 'submit' />
-
       </div>
       </form>
       </div>
@@ -253,5 +250,3 @@ ArrayOfServices(valueService){
     return a;
   }
 }
-  
- 
