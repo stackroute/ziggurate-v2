@@ -16,7 +16,7 @@ state={
   };
 
   componentDidMount () {
-    request.get('http://localhost:9080/api/v1/auth/github/login')
+    request.get('http://172.23.238.220:9080/api/v1/auth/github/login')
            .set('Accept', 'application/json')
           .end((err, res) => {
               this.setState({githubUrl: res.text});

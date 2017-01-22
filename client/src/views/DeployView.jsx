@@ -52,7 +52,7 @@ export default class DeployView extends React.Component {
      this.setState({finalServiceConfiguration: domain});
 
      Request
-          .get('http://localhost:9080/api/v1/api/'+this.state.deploymentId+'/result')
+          .get('http://172.23.238.220:9080/api/v1/api/'+this.state.deploymentId+'/result')
           .then((res)=>{
             console.log("Getting Value"+res);
             this.setState({

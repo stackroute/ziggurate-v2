@@ -8,6 +8,7 @@ const checkOut = require('./services/checkOut');
 const findCompose = require('./services/findCompose');
 const ymlTojson =require('./services/ymlTojson');
 const jsonToyml =require('./services/jsonToyml');
+const deployResults=require('./controller/writeLogDatas');
 
 var deploymentId;
 
@@ -46,7 +47,7 @@ function cloneRepo(repoName,branch,DeploymentId,socket,repoPath,callback)
     ymlTojson.bind(null)  
   
   ], function(err, results) {
-    if(err) { console.error('Cloning Failed with error', err);deployResults(deploymentId,code,err,results); return; }
+    if(err) { console.error('Cloning Failed with error', err);deployResults(deploymentId, code ,err,results); return; }
     console.log(JSON.stringify(results));
 
     socket.emit
@@ -70,8 +71,8 @@ function configService(ServiceConfig, socket, repoPath, callback)
     jsonToyml.bind(null, repoPath),
     dockerDeploy.bind(null, repoPath, stackName)
 
-  ], function(err, results) {
-    if(err) { console.error('Deploy Failed with error', err);deployResults(deploymentId,code,err,results); }
+  ], function(err, code, status, results) {
+    if(err) { console.error('Deploy Failed with error', err);deployResults(deploymentId, code ,err,results); }
      process.on('message', function(data){console.log(data)});
     deployResults(deploymentId,code,status,results);
 
