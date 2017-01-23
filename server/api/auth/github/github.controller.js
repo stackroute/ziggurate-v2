@@ -52,6 +52,7 @@ module.exports = {
     res.send('https://github.com/login/oauth/authorize?client_id=' + config.GITHUB_CLIENT_ID);
   },
   complete: function(req, res) {
+    var userName ='';
     console.log(req.query.code);
     const code = req.query.code;
     request
@@ -78,7 +79,8 @@ module.exports = {
             if(err3) { res.status(500).json(err3); return; }
               res
               .cookie('token', jwt)
-              .redirect('http://localhost:9080/#/app');
+              .redirect('http://localhost:9080/#/'+response1.login);
+              userName : response1.login;
             return;
           });
         });

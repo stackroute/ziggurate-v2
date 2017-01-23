@@ -23,9 +23,7 @@ export default class DeployView extends React.Component {
     this.deploymentIdAssigned = this.deploymentIdAssigned.bind(this);
     this.state={
       progress: null,
-      inc: 0,
-      
-      
+      inc: 0,   
     };
   }
 
@@ -121,10 +119,18 @@ export default class DeployView extends React.Component {
   }
 
   handleRepositorySelected = (selectedRepository,selectBranch) => {
+    var user=JSON.parse(localStorage.user||null);
+     var login
+     if(user!==null)
+     {
+       login=user.login;
+       console.log("login name :"+login);
+     }
     console.log('Selected Repository:', selectedRepository," ",selectBranch);
     this.setState({progress: "Cloning..."});
+    console.log("owner deploy view : "+login);
     console.log(this.state.progress);
-     this.context.socket.emit('clone',{repository:selectedRepository,branch:selectBranch,DeploymentId:this.state.deploymentId});
+     this.context.socket.emit('clone',{repository:selectedRepository,branch:selectBranch,DeploymentId:this.state.deploymentId, owner:login});
   }
 
   handleServicesConfigured = (value)=> {

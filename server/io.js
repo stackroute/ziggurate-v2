@@ -15,6 +15,7 @@ var deploymentId;
 // const mongoose=require('mongoose');
 // const dbConnection=mongoose.connect('mongodb://localhost:27017/ziggurateTemp');
 const logSchema=require('./dbModel/logSchema');
+const deployResults = require('./controller/writeLogDatas')
 const gitModule = require('./services/gitModule');
 const gitInitilize = require('./services/gitInitilize');
 const gitUpdate = require('./services/gitUpdate');
@@ -28,14 +29,14 @@ const inspectService = require('./services/inspectService');
 const publishIPToRedis = require('./services/publishIPToRedis');
 const registerReverseProxy = require('./services/registerReverseProxy')();
 
-function cloneRepo(repoName,branch,DeploymentId,socket,repoPath,callback)
+function cloneRepo(repoName, branch, DeploymentId, owner, socket, repoPath, callback)
 {
   
 	async.waterfall([
     //   to MKDIR
     createDir.bind(null,repoPath),
     //  Clone a repository
-    clone.bind(null, repoPath, repoName),
+    clone.bind(null, repoPath, owner, repoName),
     //  Checkout required branch
     checkOut.bind(null,repoPath,branch),
     //find gitmodule 
@@ -46,7 +47,7 @@ function cloneRepo(repoName,branch,DeploymentId,socket,repoPath,callback)
     ymlTojson.bind(null)  
   
   ], function(err, results) {
-    if(err) { console.error('Cloning Failed with error', err);deployResults(deploymentId,code,err,results); return; }
+    if(err) { console.error('Cloning Failed with error', err); return; }
     console.log(JSON.stringify(results));
 
     socket.emit
@@ -70,7 +71,7 @@ function configService(ServiceConfig, socket, repoPath, callback)
     jsonToyml.bind(null, repoPath),
     dockerDeploy.bind(null, repoPath, stackName)
 
-  ], function(err, results) {
+  ], function(err, code, status, results) {
     if(err) { console.error('Deploy Failed with error', err);deployResults(deploymentId,code,err,results); }
      process.on('message', function(data){console.log(data)});
     deployResults(deploymentId,code,status,results);
@@ -106,7 +107,8 @@ module.exports = function(http) {
     console.log('A User connected');
     socket.on('clone',(data)=>{
       deploymentId=data.DeploymentId;
-      cloneRepo(data.repository,data.branch,data.DeploymentId,socket,repoPath,(err,data)=>{data});
+      console.log("ownername : "+data.owner)
+      cloneRepo(data.repository,data.branch,data.DeploymentId,data.owner,socket,repoPath,(err,data)=>{data});
   	});
   	socket.on('convert',(service)=>{
       console.log("got the connection"+service.valueOfService)

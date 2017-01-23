@@ -40,17 +40,6 @@ static get contextTypes() {
 
 
    componentDidMount() {
-    const setUserInState = () => {
-      this.setState({
-        user: JSON.parse(localStorage.user)
-      });
-    };
-    const viewType = () => {
-      const token = cookie.load('token');
-    };
-
-
-  
       
     if(!localStorage.user) {
       request
@@ -58,15 +47,16 @@ static get contextTypes() {
       .end(function(err, response) {
         if(err) { throw err; }
         localStorage.user = JSON.stringify(response.body);
-        
       });
     } 
   }
+
 
   handleLogout() {
     delete localStorage.user;
 
     cookie.remove('token');
+     this.context.router.push('/');
 
      }
 
@@ -74,6 +64,13 @@ static get contextTypes() {
   handleClose = () => this.setState({open: false});
 
   render() {
+    var user=JSON.parse(localStorage.user||null);
+     
+     if(user!==null)
+     {
+       var login=user.login;
+       console.log("login :"+login);
+     }
     return(
 
       <div>
@@ -88,13 +85,13 @@ static get contextTypes() {
           <div >
             <div style={{marginTop:'50px',textAlign: 'center'}}>
               <Avatar  size={150} />
-              <h5>Git Profile Name</h5>
+              <h5>{login}</h5>
             </div>
             <Divider/>
               <List >
                 <ListItem primaryText="Dashboard" leftIcon={<DashboardIcon />} onTouchTap={this.handleClose}  />
                 <ListItem primaryText="Server" leftIcon={<Server />} onTouchTap={this.handleClose} />
-                <IndexLink to="/app/deploy" activeClassName="active" style={{textDecoration:'none'}}> <ListItem primaryText="Deploy" leftIcon={<DeployIcon />} onTouchTap={this.handleClose} /></IndexLink>
+                <IndexLink to="/ownerName/deploy" activeClassName="active" style={{textDecoration:'none'}}> <ListItem primaryText="Deploy" leftIcon={<DeployIcon />} onTouchTap={this.handleClose} /></IndexLink>
                 <ListItem primaryText="Deployed App" leftIcon={<DeployedAppIcon />} onTouchTap={this.handleClose} />
                 <Link to="/"><MenuItem primaryText="Logout" leftIcon={<Logout />} onClick={this.handleLogout.bind(this)} /></Link>
               </List>        

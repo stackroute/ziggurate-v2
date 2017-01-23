@@ -1,6 +1,6 @@
  const redis =require('redis');
  const redisPort = process.env.REDIS_PORT || 6379;
- const redisHost = process.env.REDIS_HOST || 'localhost';
+ const redisHost = process.env.REDIS_HOST || '172.23.238.251';
  const client=redis.createClient(redisPort, redisHost);
 
  var redisCompleteStore=function(value,callback)

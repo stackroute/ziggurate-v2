@@ -5,12 +5,13 @@ import DashboardView from './views/DashboardView';
 import DeployView from './views/DeployView';
 import Login from './views/Login';
 import cookie from 'react-cookie';
+import request from 'superagent';
 
 
 function redirectIfLoggedIn(nextState, replace, next) {
     const token = cookie.load('token');
     if(token) {
-            replace('/app');
+            replace('/:ownerName');
     }
     next();
 }
@@ -25,8 +26,8 @@ function redirectIfNotLoggedIn(nextState, replace, next) {
 
 
 
-class App extends Component {
 
+class App extends Component {
 
 
   render() {
@@ -34,9 +35,9 @@ class App extends Component {
       <Router history={hashHistory}>
        
         <Route path="/" component={Login} onEnter={redirectIfLoggedIn} />
-        <Route path="app" component={ContextComponent} onEnter={redirectIfNotLoggedIn}  >
+        <Route path=":ownerName" component={ContextComponent} onEnter={redirectIfNotLoggedIn}  >
           <IndexRoute component={DashboardView} onEnter={redirectIfNotLoggedIn} />
-          <Route path="/app/deploy" component={DeployView} onEnter={redirectIfNotLoggedIn}   />
+          <Route path="/:ownerName/deploy" component={DeployView} onEnter={redirectIfNotLoggedIn}   />
         </Route>
         </Router>
         );
