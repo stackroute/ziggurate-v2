@@ -11,7 +11,7 @@ import request from 'superagent';
 function redirectIfLoggedIn(nextState, replace, next) {
     const token = cookie.load('token');
     if(token) {
-            replace('/:ownerName');
+            replace('/app');
     }
     next();
 }
@@ -35,9 +35,9 @@ class App extends Component {
       <Router history={hashHistory}>
        
         <Route path="/" component={Login} onEnter={redirectIfLoggedIn} />
-        <Route path=":ownerName" component={ContextComponent} onEnter={redirectIfNotLoggedIn}  >
+        <Route path="/app" component={ContextComponent} onEnter={redirectIfNotLoggedIn}  >
           <IndexRoute component={DashboardView} onEnter={redirectIfNotLoggedIn} />
-          <Route path="/:ownerName/deploy" component={DeployView} onEnter={redirectIfNotLoggedIn}   />
+          <Route path="/app/deploy" component={DeployView} onEnter={redirectIfNotLoggedIn}   />
         </Route>
         </Router>
         );

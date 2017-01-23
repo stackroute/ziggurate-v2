@@ -91,7 +91,7 @@ static get contextTypes() {
               <List >
                 <ListItem primaryText="Dashboard" leftIcon={<DashboardIcon />} onTouchTap={this.handleClose}  />
                 <ListItem primaryText="Server" leftIcon={<Server />} onTouchTap={this.handleClose} />
-                <IndexLink to="/ownerName/deploy" activeClassName="active" style={{textDecoration:'none'}}> <ListItem primaryText="Deploy" leftIcon={<DeployIcon />} onTouchTap={this.handleClose} /></IndexLink>
+                <IndexLink to="/app/deploy" activeClassName="active" style={{textDecoration:'none'}}> <ListItem primaryText="Deploy" leftIcon={<DeployIcon />} onTouchTap={this.handleClose} /></IndexLink>
                 <ListItem primaryText="Deployed App" leftIcon={<DeployedAppIcon />} onTouchTap={this.handleClose} />
                 <Link to="/"><MenuItem primaryText="Logout" leftIcon={<Logout />} onClick={this.handleLogout.bind(this)} /></Link>
               </List>        

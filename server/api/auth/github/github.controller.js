@@ -79,7 +79,7 @@ module.exports = {
             if(err3) { res.status(500).json(err3); return; }
               res
               .cookie('token', jwt)
-              .redirect('http://localhost:9080/#/'+response1.login);
+              .redirect('http://localhost:9080/#/app');
               userName : response1.login;
             return;
           });

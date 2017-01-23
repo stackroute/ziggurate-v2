@@ -133,12 +133,12 @@ export default class DeployView extends React.Component {
      this.context.socket.emit('clone',{repository:selectedRepository,branch:selectBranch,DeploymentId:this.state.deploymentId, owner:login});
   }
 
-  handleServicesConfigured = (value)=> {
+  handleServicesConfigured = (value, serviceNameToExpose) => {
     //console.log('Services Configured:', value);
     this.setState({progress: "Configuring Services...."});
     console.log("configuring services....");
     //this.setState({finalServiceConfiguration: serviceConfiguration});
-    this.context.socket.emit('convert',{valueOfService: value});
+    this.context.socket.emit('convert',{valueOfService: value, serviceNameToExpose: serviceNameToExpose});
   }
 
    handleDnsChanged = (newData) => {

@@ -8,6 +8,7 @@ const checkOut = require('./services/checkOut');
 const findCompose = require('./services/findCompose');
 const ymlTojson =require('./services/ymlTojson');
 const jsonToyml =require('./services/jsonToyml');
+const deployResults=require('./controller/writeLogDatas');
 
 var deploymentId;
 
@@ -15,7 +16,6 @@ var deploymentId;
 // const mongoose=require('mongoose');
 // const dbConnection=mongoose.connect('mongodb://localhost:27017/ziggurateTemp');
 const logSchema=require('./dbModel/logSchema');
-const deployResults = require('./controller/writeLogDatas')
 const gitModule = require('./services/gitModule');
 const gitInitilize = require('./services/gitInitilize');
 const gitUpdate = require('./services/gitUpdate');
@@ -101,7 +101,7 @@ function domainConfig(domainName, repoPath, serviceNameToExpose)
 
 module.exports = function(http) {
   const io = require('socket.io')(http);
-  
+  let serviceNameToExpose;  
   io.on('connection', (socket) => {
     const repoPath=path.join('tmp/repositories').concat('/'+Math.floor(Math.random()*18371));
     console.log('A User connected');
@@ -111,7 +111,8 @@ module.exports = function(http) {
       cloneRepo(data.repository,data.branch,data.DeploymentId,data.owner,socket,repoPath,(err,data)=>{data});
   	});
   	socket.on('convert',(service)=>{
-      console.log("got the connection"+service.valueOfService)
+      console.log("got the connection"+service.valueOfService);
+      serviceNameToExpose = service.serviceNameToExpose;
       configService(service.valueOfService,socket,repoPath,(err,service)=>{service});
   	});
     socket.on('disconnect', () => {
@@ -119,7 +120,7 @@ module.exports = function(http) {
     });
     socket.on('domainConfig',(dconf) => {
       //TODO: GET THE EXPOSED SERVICE NAME FROM THE CLIENT
-      domainConfig(dconf.domainName, repoPath, 'tasker');
+      domainConfig(dconf.domainName, repoPath, serviceNameToExpose);
       console.log('configing domain');
     });
     require('./io/deploy')(socket);

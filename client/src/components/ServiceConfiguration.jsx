@@ -131,7 +131,7 @@ onChange1(index, newService) {
   this.setState({services: services, dialogOpen: dialogOpen});
 }
 
-  handleChangePorts= (event, index, value) => this.setState({selectedService: value});  
+  handleChangePorts= (event, index, value) => this.setState({serviceNameToExpose: value});  
 
   render() {
    
@@ -198,7 +198,7 @@ onChange1(index, newService) {
     return(
       <div>
           <div>
-        <form  onSubmit={this.handleServicesConfigured.bind(this,this.state.valueService)}>
+        <form  onSubmit={this.handleServicesConfigured.bind(this,this.state.valueService, this.state.serviceNameToExpose)}>
       <div >
       <div style={{marginTop:0}}>
       <h2 style={{textAlign:"center"}}>Configure Microservices</h2>
@@ -208,7 +208,7 @@ onChange1(index, newService) {
       <div>
        <SelectField
          floatingLabelText="Select service contain port"
-         value={this.state.selectedService}
+         value={this.state.serviceNameToExpose}
          onChange={this.handleChangePorts}
          >
        {img}
@@ -224,10 +224,10 @@ onChange1(index, newService) {
 
   }
   
-  handleServicesConfigured(valueService)
+  handleServicesConfigured(valueService, serviceNameToExpose)
   { 
     console.log(valueService);
-    this.props.onSubmit(valueService);
+    this.props.onSubmit(valueService, serviceNameToExpose);
   }
 
 ArrayOfServices(valueService){
