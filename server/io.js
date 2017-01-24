@@ -1,6 +1,8 @@
 const async = require('async');
 const path = require('path');
 
+const dockerEvents = require('./services/dockerApis/dockerEvents');
+const setInitialState = require('./services/dockerApis/setInitialState');
 const clone = require('./services/clone');
 const compose = require('./services/compose');
 const createDir = require('./services/createDir');
@@ -108,7 +110,7 @@ module.exports = function(http) {
     socket.on('clone',(data)=>{
       deploymentId=data.DeploymentId;
       console.log("ownername : "+data.owner)
-      cloneRepo(data.repository,data.branch,data.DeploymentId,data.owner,socket,repoPath,(err,data)=>{data});
+      cloneRepo(data.repository,data.branch, data.DeploymentId, data.owner, socket,repoPath,(err,data) => {data});
   	});
   	socket.on('convert',(service)=>{
       console.log("got the connection"+service.valueOfService);
@@ -119,11 +121,9 @@ module.exports = function(http) {
       console.log('A User disconnected');
     });
     socket.on('domainConfig',(dconf) => {
-      //TODO: GET THE EXPOSED SERVICE NAME FROM THE CLIENT
       domainConfig(dconf.domainName, repoPath, serviceNameToExpose);
       console.log('configing domain');
     });
     require('./io/deploy')(socket);
-
   });
 }

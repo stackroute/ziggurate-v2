@@ -23,7 +23,7 @@ export default class DeployView extends React.Component {
     this.deploymentIdAssigned = this.deploymentIdAssigned.bind(this);
     this.state={
       progress: null,
-      inc: 0,   
+      inc: 0,
     };
   }
 

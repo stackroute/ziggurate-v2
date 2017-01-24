@@ -17,19 +17,14 @@ marginTop: 30,
  display: 'inline-block',
   
  };
-
-
     return(
-    
      <div>
-     
-  <Paper style={style1} zDepth={1}  >
-  <h1 style = {{textAlign: 'center', margin: 0}}> Reports</h1>
-<Divider/>
-<h3 style = {{textAlign: 'left', margin: 10}}>Service: </h3>
-<h3 style = {{textAlign: 'left', margin: 10}}>Result:</h3>
-<h3 style = {{textAlign: 'left', margin: 10}}>Code:</h3>
- 
+	  <Paper style={style1} zDepth={1}  >
+	  <h1 style = {{textAlign: 'center', margin: 0}}> Reports</h1>
+		<Divider/>
+		<h3 style = {{textAlign: 'left', margin: 10}}>Service: </h3>
+		<h3 style = {{textAlign: 'left', margin: 10}}>Result:</h3>
+		<h3 style = {{textAlign: 'left', margin: 10}}>Code:</h3> 
   </Paper>
   </div>
       );
