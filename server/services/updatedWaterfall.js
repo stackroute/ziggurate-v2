@@ -40,11 +40,12 @@ var path,pathCompose;
     findCompose.bind(null, repoPath),
     ymlTojson.bind(null),
     jsonToyml.bind(null),
-    dockerBuild.bind(null,repoPath),
-    dockerTag.bind(null,repoPath),
-    dockerPush.bind(null),
-    dockerBundle.bind(null,repoPath),
-    dockerDeploy.bind(null,repoPath)
+    dockerBuild.bind(null, repoPath),
+    findCompose.bind(null, repoPath),
+    ymlTojson.bind(null),
+    replaceVersion.bind(null),
+    jsonToyml.bind(null, repoPath),
+    dockerDeploy.bind(null, repoPath, stackName)
 
    // compose.bind(null,repoPath)
     

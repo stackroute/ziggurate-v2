@@ -41,34 +41,16 @@ class DeployedApp extends Component {
    return (
      <div>
      
-  <Paper style={style1} zDepth={1} circle={true} >
+  <Paper style={style1} zDepth={1}  >
   <h1> App1</h1>
 <h3 style={style5}> Basic info</h3>
 <Divider/>
-<h4>total_no_of_services: 5</h4>
-<h4>total_memory_usage: 2048 MB</h4>
+<h4>Domain Name:</h4>
+<h4>Status: </h4>
  <IndexLink to="/App/AppDetails" activeClassName="active" style={{textDecoration:'none'}}><RaisedButton label="For More Info" primary={true}/></IndexLink>
       
   </Paper>
-   <Paper style={style1} zDepth={2} circle={true} >
-   <h1>App2</h1>
-
-<h3 style={style5}> Basic info</h3>
-<Divider/>
-<h4>total_no_of_services: 5</h4>
-<h4>total_memory_usage: 2048 MB</h4>
-  <RaisedButton label="For More Info" primary={true} />
-   </Paper>
-   <Paper style={style3} zDepth={3} circle={true}>
-    <h1>App3</h1>
-
-<h3 style={style5}> Basic info</h3>
-<Divider/>
-<h4>total_no_of_services: 5</h4>
-<h4>total_memory_usage: 2048 MB</h4>
-<RaisedButton label="For More Info" primary={true} />
-    </Paper>
-  
+     
      </div>
    );
  }
