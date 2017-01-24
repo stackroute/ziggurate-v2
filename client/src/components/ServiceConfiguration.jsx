@@ -45,7 +45,8 @@ export default class ServiceConfiguration extends React.Component {
     this.state = {
       serviceNames: [],
       services: [],
-      dialogOpen: []
+      dialogOpen: [],
+      isButtonDisabled: true
     };
   }
   
@@ -131,7 +132,7 @@ onChange1(index, newService) {
   this.setState({services: services, dialogOpen: dialogOpen});
 }
 
-  handleChangePorts= (event, index, value) => this.setState({selectedService: value});  
+  handleChangePorts= (event, index, value) => this.setState({selectedService: value,isButtonDisabled: false});  
 
   render() {
    
@@ -198,7 +199,7 @@ onChange1(index, newService) {
     return(
       <div>
           <div>
-        <form  onSubmit={this.handleServicesConfigured.bind(this,this.state.valueService)}>
+        <form  onSubmit={this.handleServicesConfigured.bind(this,this.state.valueService,this.state.selectedService)}>
       <div >
       <div style={{marginTop:0}}>
       <h2 style={{textAlign:"center"}}>Configure Microservices</h2>
@@ -215,7 +216,7 @@ onChange1(index, newService) {
        </SelectField>
       </div>      
       </div>
-      <RaisedButton label="Next" primary={true} style={{margin:12}} type= 'submit' />
+      <RaisedButton label="Next" disabled={ this.state.isButtonDisabled} primary={true} style={{margin:12}} type= 'submit' />
       </div>
       </form>
       </div>
@@ -224,10 +225,14 @@ onChange1(index, newService) {
 
   }
   
-  handleServicesConfigured(valueService)
+  handleServicesConfigured(valueService,portService)
   { 
-    console.log(valueService);
-    this.props.onSubmit(valueService);
+    this.setState({
+     isButtonDisabled:true,
+     
+   });
+    console.log("portvalue"+portService);
+    this.props.onSubmit(valueService,portService);
   }
 
 ArrayOfServices(valueService){

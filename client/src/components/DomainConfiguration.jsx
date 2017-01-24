@@ -23,7 +23,9 @@ export default class DomainConfiguration extends React.Component {
 
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      isButtonDisabled: true
+    };
   }
 
   render() {
@@ -46,7 +48,7 @@ export default class DomainConfiguration extends React.Component {
           <RaisedButton
             label="Finish"
             primary={true}
-            disabled={false}
+            disabled={ this.state.isButtonDisabled}
             onClick={this.handleFinish.bind(this)}
             />
         </div>
@@ -62,11 +64,19 @@ export default class DomainConfiguration extends React.Component {
 
   handleDomainNameChange(e) {
     this.setState({
+     isButtonDisabled:false,
+     
+   });
+    this.setState({
       domainName: e.target.value
     });
   }
 
   handleFinish() {
+    this.setState({
+     isButtonDisabled:true,
+     
+   });
     this.props.dnsChanged({appName: this.state.appName, domainName: this.state.domainName + '.ziggurate.blr.stackroute.in'});
   }
 }

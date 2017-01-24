@@ -4,6 +4,8 @@ import ContextComponent from './components/ContextComponent';
 import DashboardView from './views/DashboardView';
 import DeployView from './views/DeployView';
 import Login from './views/Login';
+import DeployedAppView from './views/DeployedAppView';
+import ServiceInfoView from './views/ServiceInfoView';
 import cookie from 'react-cookie';
 
 
@@ -36,7 +38,10 @@ class App extends Component {
         <Route path="/" component={Login} onEnter={redirectIfLoggedIn} />
         <Route path="app" component={ContextComponent} onEnter={redirectIfNotLoggedIn}  >
           <IndexRoute component={DashboardView} onEnter={redirectIfNotLoggedIn} />
-          <Route path="/app/deploy" component={DeployView} onEnter={redirectIfNotLoggedIn}   />
+         
+          <Route path="view" component={DeployedAppView} onEnter={redirectIfNotLoggedIn}  />
+          <Route path="deploy" component={DeployView} onEnter={redirectIfNotLoggedIn}   />
+          <Route path="serviceinfo" component={ServiceInfoView} onEnter={redirectIfNotLoggedIn}  />
         </Route>
         </Router>
         );

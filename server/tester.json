@@ -1,0 +1,48 @@
+{
+"project": "hackathon",
+    "services": [
+        {
+            "id": "web",
+            "apps": [
+                {
+                    "id": "node",
+                    "domain": {
+                        "uri": "DOMAINYOUWANT.sloppy.zone"
+                    },
+                    "mem": 512,
+                    "image": "YOURDOCKERHUBNAME/hackathon-starter",
+                    "instances": 1,
+                    "port_mappings": [
+                        {
+                            "container_port": 3000
+                        }
+                    ],
+                    "env": {
+                        "MONGODB_URI": "mongodb://mongodb.db.hackathon/hackathon"
+                    },
+                    "dependencies": [
+                        "../../db/mongodb"
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "db",
+            "apps": [
+                {
+                    "id": "mongodb",
+                    "mem": 512,
+                    "image": "mongo:3",
+                    "cmd": "mongod --smallfiles",
+                    "instances": 1,
+                    "volumes": [
+                        {
+                            "container_path": "/data/db",
+                            "size": "8GB"
+                }
+            ]
+                    }
+            ]
+        }
+    ]
+}

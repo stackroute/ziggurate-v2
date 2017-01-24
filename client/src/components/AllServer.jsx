@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import Divider from 'material-ui/Divider';
 import AppBar from 'material-ui/AppBar';

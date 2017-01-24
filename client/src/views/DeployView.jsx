@@ -24,14 +24,15 @@ export default class DeployView extends React.Component {
     this.state={
       progress: null,
       inc: 0,
-      
+      portService:null
       
     };
   }
 
   static get contextTypes() {
     return {
-      socket: React.PropTypes.object.isRequired
+      socket: React.PropTypes.object.isRequired,
+      router: React.PropTypes.object.isRequired
     };
   }
 
@@ -62,6 +63,13 @@ export default class DeployView extends React.Component {
 
           });
    });
+
+   this.context.socket.on('lastStep',(msg)=>{
+      console.log('Deployed');
+      this.setState({deployed:msg}); 
+      this.context.router.push('/app/view');
+      
+   });
    
     this.context.socket.on('deploymentIdAssigned', (deploymentIdAssigned)=>{
       console.log("DeploymentId"+deploymentIdAssigned);
@@ -71,6 +79,7 @@ export default class DeployView extends React.Component {
 
     this.context.socket.emit('getDeploymentId', {accessToken: 'abc'});
       console.log(this.state.result);
+
      
   }
 
@@ -127,8 +136,9 @@ export default class DeployView extends React.Component {
      this.context.socket.emit('clone',{repository:selectedRepository,branch:selectBranch,DeploymentId:this.state.deploymentId});
   }
 
-  handleServicesConfigured = (value)=> {
-    //console.log('Services Configured:', value);
+  handleServicesConfigured = (value,mainService)=> {
+    console.log("portService", mainService);
+    this.setState({portService:mainService});
     this.setState({progress: "Configuring Services...."});
     console.log("configuring services....");
     //this.setState({finalServiceConfiguration: serviceConfiguration});
@@ -137,10 +147,12 @@ export default class DeployView extends React.Component {
 
    handleDnsChanged = (newData) => {
     console.log('DNS Changed');
+   
     let obj = {
       appName: newData.appName,
-      domainName: newData.domainName
+      domainName: newData.domainName,
+      mainImage:this.state.portService
     };
-    this.context.socket.emit('domainConfig', obj);
+    this.context.socket.emit('domainConfig',obj);
   }
 }

@@ -1,0 +1,9 @@
+version: '3'
+services:
+  cloud:
+    image: dockercloud/hello-world
+    ports:
+     - 80
+    deploy:
+      mode: replicated
+      replicas: 3

@@ -9,8 +9,10 @@ const findCompose = require('./services/findCompose');
 const ymlTojson =require('./services/ymlTojson');
 const jsonToyml =require('./services/jsonToyml');
 const deployResults=require('./controller/writeLogDatas');
+const appDetails=require('./controller/writeAppData');
 
 var deploymentId;
+var serviceDetails;
 
 //const mongoModel=require('./dbModel/logSchema');
 // const mongoose=require('mongoose');
@@ -86,16 +88,19 @@ function configService(ServiceConfig, socket, repoPath, callback)
 
 }
 
-function domainConfig(domainName, repoPath, serviceNameToExpose)
+function domainConfig(domainName, appName, repoPath, serviceNameToExpose,socket)
 {
-  let stackName = repoPath.split('/')
+  let stackName = repoPath.split('/');
   stackName=stackName[stackName.length - 1];
   async.waterfall([
     inspectService.bind(null, stackName, serviceNameToExpose),
     publishIPToRedis.bind(null, domainName)
     ], (err, results) => {
+      if(err){console.log("Failed to configure reverse proxy due to"+err);return;}
+      appDetails(deploymentId, domainName, appName, 'Running', serviceDetails);
         console.log('Reverse Proxy Done');
-    });
+        socket.emit('lastStep',results);
+      });
 
 }
 
@@ -110,7 +115,8 @@ module.exports = function(http) {
       cloneRepo(data.repository,data.branch,data.DeploymentId,socket,repoPath,(err,data)=>{data});
   	});
   	socket.on('convert',(service)=>{
-      console.log("got the connection"+service.valueOfService)
+      serviceDetails=service.valueOfService;
+      console.log("got the connection"+service.valueOfService);
       configService(service.valueOfService,socket,repoPath,(err,service)=>{service});
   	});
     socket.on('disconnect', () => {
@@ -118,7 +124,8 @@ module.exports = function(http) {
     });
     socket.on('domainConfig',(dconf) => {
       //TODO: GET THE EXPOSED SERVICE NAME FROM THE CLIENT
-      domainConfig(dconf.domainName, repoPath, 'tasker');
+      console.log("lastTestttttttt"+dconf.portImage);
+      domainConfig(dconf.domainName, dconf.appName, repoPath, 'tasker',socket);
       console.log('configing domain');
     });
     require('./io/deploy')(socket);
