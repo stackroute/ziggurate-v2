@@ -13,10 +13,7 @@ export default class ErrorDisply extends React.Component {
   }
 constructor() {
   super();
-   this.state = {
-    
-    
-
+   this.state = {    
   };
   
 }

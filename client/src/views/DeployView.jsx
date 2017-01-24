@@ -24,9 +24,6 @@ export default class DeployView extends React.Component {
     this.state={
       progress: null,
       inc: 0,
-      portService:null
-      
-
     };
   }
 
@@ -159,9 +156,10 @@ export default class DeployView extends React.Component {
    
     let obj = {
       appName: newData.appName,
-      domainName: newData.domainName,
-      mainImage:this.state.portService
-    };
+      domainName: newData.domainName
+      };
+      console.log("object : "+obj.appName);
+      console.log("domainName : "+obj.domainName);
     this.context.socket.emit('domainConfig',obj);
   }
 }

@@ -7,7 +7,6 @@ import {Table, TableBody, TableFooter, TableHeader, TableHeaderColumn, TableRow,
 
 class Home extends Component {
 
-
   render() {
     return(
 
@@ -21,19 +20,19 @@ class Home extends Component {
          <div  style={{justifyContent: 'space-around',textAlign:'center',}}>
          <TableRowColumn>
          <div style= {{marginLeft: '200px',marginTop:'10px'}}>
-         <Avatar size={200} backgroundColor='#66BB6A '>0</Avatar>
+         <Avatar size={200} backgroundColor='#66BB6A '>1</Avatar>
          <h2 style={{textAlign: 'center'}}>Servers</h2>
          </div>
          </TableRowColumn>
          <TableRowColumn>
          <div style= {{marginLeft: '100px',marginTop:'10px'}}>
-         <Avatar size={200} backgroundColor='#66BB6A '>2</Avatar>
+         <Avatar size={200} backgroundColor='#66BB6A '>{this.props.containers}</Avatar>
          <h2 style={{textAlign: 'center'}}>Containers</h2>
          </div>
          </TableRowColumn>
          <TableRowColumn>
          <div style= {{marginLeft: '100px',marginTop:'10px'}}>
-         <Avatar size={200} backgroundColor='#66BB6A '>2</Avatar>
+         <Avatar size={200} backgroundColor='#66BB6A '>{this.props.services}</Avatar>
          <h2 style={{textAlign: 'center'}}>Services</h2>
          </div>
          </TableRowColumn>
@@ -69,13 +68,9 @@ class Home extends Component {
          </div>
          </Paper>
          </div>
-  
 </div>
-
-
    );
-
-    }
+        }
 }
 
 export default Home;

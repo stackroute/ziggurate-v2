@@ -1,6 +1,8 @@
 const async = require('async');
 const path = require('path');
 
+const dockerEvents = require('./services/dockerApis/dockerEvents');
+const setInitialState = require('./services/dockerApis/setInitialState');
 const clone = require('./services/clone');
 const compose = require('./services/compose');
 const createDir = require('./services/createDir');
@@ -92,6 +94,11 @@ function domainConfig(domainName, appName, repoPath, serviceNameToExpose,socket)
 {
   let stackName = repoPath.split('/');
   stackName=stackName[stackName.length - 1];
+  console.log("domain name :"+domainName);
+  console.log("app name : "+appName);
+  console.log("repo path :"+repoPath);
+  console.log("service name to expose :"+serviceNameToExpose);
+
   async.waterfall([
     inspectService.bind(null, stackName, serviceNameToExpose),
     publishIPToRedis.bind(null, domainName)
@@ -113,7 +120,7 @@ module.exports = function(http) {
     socket.on('clone',(data)=>{
       deploymentId=data.DeploymentId;
       console.log("ownername : "+data.owner)
-      cloneRepo(data.repository,data.branch,data.DeploymentId,data.owner,socket,repoPath,(err,data)=>{data});
+      cloneRepo(data.repository,data.branch, data.DeploymentId, data.owner, socket,repoPath,(err,data) => {data});
   	});
   	socket.on('convert',(service)=>{
 
@@ -126,13 +133,11 @@ module.exports = function(http) {
       console.log('A User disconnected');
     });
     socket.on('domainConfig',(dconf) => {
-      //TODO: GET THE EXPOSED SERVICE NAME FROM THE CLIENT
-
-      domainConfig(dconf.domainName, repoPath, serviceNameToExpose);
+      
+      domainConfig(dconf.domainName,dconf.appName, repoPath, serviceNameToExpose, socket);
 
       console.log('configing domain');
     });
     require('./io/deploy')(socket);
-
   });
 }
