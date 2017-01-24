@@ -2,7 +2,7 @@ var status;
 var redisStore =require('./redisFunctions');
 var redisCompleteStore=require('./redisUserFunctions');
 
-var gitclone=function(repoPath, repoName, callback) {
+var gitclone=function(repoPath, ownerName, repoName, callback) {
         const spawn=require('child_process').spawn;
        
 
@@ -14,8 +14,9 @@ var gitclone=function(repoPath, repoName, callback) {
 
         //const parent=spawn('pwd',{cwd: path});
         //const gitclone1=spawn('git', ['clone', 'https://github.com/'+repoName+'/.'],{cwd:path});
-        console.log(path);
-         const gitclone1=spawn('git', ['clone', 'https://github.com/'+repoName, '.'],{cwd:path});
+        console.log( "owner name :"+ownerName);
+
+         const gitclone1=spawn('git', ['clone', 'https://github.com/'+ownerName+'/'+repoName, '.'],{cwd:path});
         gitclone1.stderr.on('data', (data)=> {
              status=`${data}`;
              redisCompleteStore(status);

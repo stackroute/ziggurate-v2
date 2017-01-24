@@ -4,14 +4,16 @@ var findCompose=function(repoPath, callback) {
         //ls -lh /usr
         //const repository = 'akanksha152/tasker';
         //const repoName = repository.split('/')[1];
+        console.log('repoPath'+repoPath);
         const compose1=spawn('find', ['-name','docker-compose.yml'], {cwd:repoPath});//find . -name docker-compose.yml
 
        compose1.stdout.on('data', (data)=> {
             pathCompose=`${data}`;
             pathCompose = pathCompose.replace('\n','');
+            console.log('repoPath'+repoPath);
             console.log('pathCompose:' +pathCompose+ ':end');
             path=repoPath.concat(pathCompose.replace('.',''));
-            //console.log(path);
+            console.log("check : "+path);
             //path=JSON.parse(path);
             //fullPath=path
           

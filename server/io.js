@@ -31,14 +31,14 @@ const inspectService = require('./services/inspectService');
 const publishIPToRedis = require('./services/publishIPToRedis');
 const registerReverseProxy = require('./services/registerReverseProxy')();
 
-function cloneRepo(repoName,branch,DeploymentId,socket,repoPath,callback)
+function cloneRepo(repoName, branch, DeploymentId, owner, socket, repoPath, callback)
 {
   
 	async.waterfall([
     //   to MKDIR
     createDir.bind(null,repoPath),
     //  Clone a repository
-    clone.bind(null, repoPath, repoName),
+    clone.bind(null, repoPath, owner, repoName),
     //  Checkout required branch
     checkOut.bind(null,repoPath,branch),
     //find gitmodule 
@@ -49,7 +49,7 @@ function cloneRepo(repoName,branch,DeploymentId,socket,repoPath,callback)
     ymlTojson.bind(null)  
   
   ], function(err, results) {
-    if(err) { console.error('Cloning Failed with error', err);deployResults(deploymentId, code ,err,results); return; }
+    if(err) { console.error('Cloning Failed with error', err); return; }
     console.log(JSON.stringify(results));
 
     socket.emit
@@ -74,7 +74,7 @@ function configService(ServiceConfig, socket, repoPath, callback)
     dockerDeploy.bind(null, repoPath, stackName)
 
   ], function(err, code, status, results) {
-    if(err) { console.error('Deploy Failed with error', err);deployResults(deploymentId, code ,err,results); }
+    if(err) { console.error('Deploy Failed with error', err);deployResults(deploymentId,code,err,results); }
      process.on('message', function(data){console.log(data)});
     deployResults(deploymentId,code,status,results);
 
@@ -106,17 +106,20 @@ function domainConfig(domainName, appName, repoPath, serviceNameToExpose,socket)
 
 module.exports = function(http) {
   const io = require('socket.io')(http);
-  
+  let serviceNameToExpose;  
   io.on('connection', (socket) => {
     const repoPath=path.join('tmp/repositories').concat('/'+Math.floor(Math.random()*18371));
     console.log('A User connected');
     socket.on('clone',(data)=>{
       deploymentId=data.DeploymentId;
-      cloneRepo(data.repository,data.branch,data.DeploymentId,socket,repoPath,(err,data)=>{data});
+      console.log("ownername : "+data.owner)
+      cloneRepo(data.repository,data.branch,data.DeploymentId,data.owner,socket,repoPath,(err,data)=>{data});
   	});
   	socket.on('convert',(service)=>{
+
       serviceDetails=service.valueOfService;
       console.log("got the connection"+service.valueOfService);
+      serviceNameToExpose = service.serviceNameToExpose;
       configService(service.valueOfService,socket,repoPath,(err,service)=>{service});
   	});
     socket.on('disconnect', () => {
@@ -124,8 +127,9 @@ module.exports = function(http) {
     });
     socket.on('domainConfig',(dconf) => {
       //TODO: GET THE EXPOSED SERVICE NAME FROM THE CLIENT
-      console.log("lastTestttttttt"+dconf.portImage);
-      domainConfig(dconf.domainName, dconf.appName, repoPath, 'tasker',socket);
+
+      domainConfig(dconf.domainName, repoPath, serviceNameToExpose);
+
       console.log('configing domain');
     });
     require('./io/deploy')(socket);

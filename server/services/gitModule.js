@@ -23,7 +23,7 @@ var gitMod=function(repoPath, callback) {
         });
         
         gitmodule.on('close', (code) => {
-            console.log(`Status:${code}`);
+            console.log(`git module Status:${code}`);
             if(code !== 0) { callback(new Error('git clone exited with code', code)); return; }
            // callback(null,status);
            else if(status!=='undefined')

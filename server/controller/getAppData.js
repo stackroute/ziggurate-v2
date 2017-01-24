@@ -5,7 +5,9 @@ module.exports=function(req,res)
 	
 
 
+
 mongoModel.find({},function(err,appSchema)
+
 {
 	console.log("getting Connection");
 

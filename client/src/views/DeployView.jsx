@@ -26,6 +26,7 @@ export default class DeployView extends React.Component {
       inc: 0,
       portService:null
       
+
     };
   }
 
@@ -53,7 +54,7 @@ export default class DeployView extends React.Component {
      this.setState({finalServiceConfiguration: domain});
 
      Request
-          .get('http://172.23.238.220:9080/api/v1/api/'+this.state.deploymentId+'/result')
+          .get('http://localhost:9080/api/v1/api/'+this.state.deploymentId+'/result')
           .then((res)=>{
             console.log("Getting Value"+res);
             this.setState({
@@ -130,19 +131,27 @@ export default class DeployView extends React.Component {
   }
 
   handleRepositorySelected = (selectedRepository,selectBranch) => {
+    var user=JSON.parse(localStorage.user||null);
+     var login
+     if(user!==null)
+     {
+       login=user.login;
+       console.log("login name :"+login);
+     }
     console.log('Selected Repository:', selectedRepository," ",selectBranch);
     this.setState({progress: "Cloning..."});
+    console.log("owner deploy view : "+login);
     console.log(this.state.progress);
-     this.context.socket.emit('clone',{repository:selectedRepository,branch:selectBranch,DeploymentId:this.state.deploymentId});
+     this.context.socket.emit('clone',{repository:selectedRepository,branch:selectBranch,DeploymentId:this.state.deploymentId, owner:login});
   }
 
-  handleServicesConfigured = (value,mainService)=> {
-    console.log("portService", mainService);
-    this.setState({portService:mainService});
+
+  handleServicesConfigured = (value, serviceNameToExpose) => {
+    //console.log('Services Configured:', value);
     this.setState({progress: "Configuring Services...."});
     console.log("configuring services....");
     //this.setState({finalServiceConfiguration: serviceConfiguration});
-    this.context.socket.emit('convert',{valueOfService: value});
+    this.context.socket.emit('convert',{valueOfService: value, serviceNameToExpose: serviceNameToExpose});
   }
 
    handleDnsChanged = (newData) => {
