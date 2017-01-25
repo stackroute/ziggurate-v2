@@ -7,10 +7,10 @@ appName: {type:String, required:true},
 domainName:{type:String},
 status:{type:String},
 services:[{
-	name:{type:String,required:true},
+	name:{type:String},
 	config:[{
-		key:{type:String,required:true},
-		value:{type:String,required:true}
+		key:{type:String},
+		value:{type:String}
 	}]
 }]
 

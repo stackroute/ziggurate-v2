@@ -15,6 +15,7 @@ const appDetails=require('./controller/writeAppData');
 
 var deploymentId;
 var serviceDetails;
+var status;
 
 //const mongoModel=require('./dbModel/logSchema');
 // const mongoose=require('mongoose');
@@ -103,9 +104,10 @@ function domainConfig(domainName, appName, repoPath, serviceNameToExpose,socket)
     inspectService.bind(null, stackName, serviceNameToExpose),
     publishIPToRedis.bind(null, domainName)
     ], (err, results) => {
-      if(err){console.log("Failed to configure reverse proxy due to"+err);return;}
-      appDetails(deploymentId, domainName, appName, 'Running', serviceDetails);
+      if(err){console.log("Failed to configure reverse proxy due to"+err); status="Not Running"; return;}
+        status="Running"
         console.log('Reverse Proxy Done');
+      appDetails(deploymentId, domainName, appName, status, serviceDetails);
         socket.emit('lastStep',results);
       });
 

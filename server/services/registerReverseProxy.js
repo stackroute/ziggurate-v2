@@ -21,6 +21,7 @@ function registerReverseProxy() {
 
 function registerRedBirdProxy(domainName, publishingIP) {
   proxy.register(domainName, publishingIP);
+  console.log("publish ip :"+publishingIP);
   setTimeout(registerReverseProxy);
 }
 

@@ -10,7 +10,7 @@ module.exports=function(deploymentId,domainName,appName,status,serviceDetails)
           appDetails.domainName=domainName;
           appDetails.status=status;
           console.log("ObjectGot"+serviceDetails);*/
-          let servicesEnv=serviceDetails.services.tasker.environment;
+          //let servicesEnv=serviceDetails.services.tasker.environment;
           
 
           // console.log("ServiceName "+serviceNames);
@@ -18,19 +18,26 @@ module.exports=function(deploymentId,domainName,appName,status,serviceDetails)
 
           //TODO: Get List of Services
           const serviceNames = Object.keys(serviceDetails.services);
-
+          var configArray=[];
           const services = serviceNames.map((serviceName) => {
             const service = serviceDetails.services[serviceName];
+              if(Object.hasOwnProperty(service.environment)) 
+              
+              {
 
             const configKeys = Object.keys(service.environment);
 
-            const configArray = configKeys.map((key) => {
+            configArray = configKeys.map((key) => {
               return {
                 key: key,
                 value: service.environment[key]
               };
             });
-
+          }
+          else
+          {
+            configArray:[];
+          }
             return {
               name: serviceName,
               config: configArray
